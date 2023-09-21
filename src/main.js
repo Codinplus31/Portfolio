@@ -1,10 +1,10 @@
 import React from 'react';
 
-import Header from './header.jsx';
-import Skills from './skills.jsx';
-import Projects from './project';
-import About from './about';
-import Contact  from './contact';
+import Header from './header.js';
+import Skills from './skills.js';
+import Projects from './project.js';
+import About from './about.js';
+import Contact  from './contact.js';
 function Main(){
 
 return (
