@@ -1,10 +1,11 @@
-import React, {useEffect, useRef} from "react";
-function Project(){
-  let project1 = useRef();
-  let project2 = useRef();
-  let project3 = useRef();
+import React, { useEffect, useRef } from "react";
+
+function Skills(){
+  let skills = useRef();
+  let frontEnd = useRef();
+  let backEnd = useRef();
   useEffect(()=>{
-    function ProjectTran(elem, classes){
+    function ScrollTran(elem, classes){
 
       const observer = new IntersectionObserver((entry)=>{
       console.log(entry)
@@ -13,76 +14,47 @@ function Project(){
       e.target.classList.add(classes)
       
     }else{
-      // e.target.classList.remove(classes)
+      e.target.classList.remove(classes)
     }
   })
 })
 const Skills = elem;
 observer.observe(Skills);
 }
-ProjectTran(project1.current, 'projtran')
-ProjectTran(project2.current, 'projtran')
-ProjectTran(project3.current, 'projtran')
+ScrollTran(skills.current, 'skills-show')
+ScrollTran(frontEnd.current, 'frontend')
+ScrollTran(backEnd.current, 'backend')
 },[])
-    return (
-        <div id="project" className="project">
-              <h1>Projects</h1>
-              <div  className="proj">
-                <div ref={project1} className="projsec">
-                  <div className="img">
-                    <img src="downloader.png"/>
 
+    return(
+        <div ref={skills} id="skills" className="Skills">
+                  <h1><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  viewBox="0 0 16 16">
+  <path fillRule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+</svg>   Skills    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  viewBox="0 0 16 16">
+  <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+</svg></h1>
+                  <div className="cat" ref={frontEnd}>
+                    <h3>Frond-end</h3>
+                    <div title="javascript"><img src='javascript.svg' width='50%' height='50%'/></div>
+                    <div title="reactjs"><img src='react.svg' width='50%' height='50%'/></div>
+                    <div title="Vuejs"><img src='vue.svg' width='50%' height='50%'/></div>
+                    <div title="babylonjs"><img src='babylon.svg' width='70%' height='70%' /></div>
+                    <div title="bootstrap"><img src='bootstrap.svg' width='50%' height='50%'/></div>
+                    <div title="tailwind"><img src='tailwind.svg' width='50%' height='50%'/></div>
+                    <div title="css"><img src='css.svg' width='50%' height='50%'/></div>
+                    <div title="jQuery"><img src='jquery.svg' width='50%' height='50%'/></div>
                   </div>
-                    <h2>YTDS</h2>
-                    <p>YTDS is a youtube tool for downloading youtube video, converting video to mp3 and getting youtube video keywords.</p>
-                    <div>
-                        <a><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  viewBox="0 0 16 16">
-  <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/>
-</svg></a>
-                        <a><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  viewBox="0 0 16 16">
-  <path fillRule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
-  <path fillRule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
-</svg></a>
-                    </div>
-                </div>
-                <div ref={project2} className="projsec">
-                  <div className="img">
-                    <img src="movies.png"/>
-
+                  <div className="cat" ref={backEnd}>
+                    <h3>Back-end</h3>
+                    <div title="nodejs"><img src='node.svg' width='50%' height='50%'/></div>
+                    <div title="expressjs"><img src='express.svg' width='50%' height='50%'/></div>
+                    <div title="socket.io"><img src='socket.svg' width='50%' height='50%'/></div>
+                    <div title="mysql"><img src='mysql.svg' width='60%' height='60%'/></div>
+                    <div title="postgresql"><img src='postgresql.svg' width='50%' height='50%'/></div>
+                    <div title="php"><img src='php.svg' width='50%' height='50%'/></div>
+                
                   </div>
-                    <h2>MAXIGRAM</h2>
-                    <p>This is a movie streaming service demo is still under construction.</p>
-                    <div>
-                        <a><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  viewBox="0 0 16 16">
-  <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/>
-</svg></a>
-                        <a><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  viewBox="0 0 16 16">
-  <path fillRule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
-  <path fillRule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
-</svg></a>
-                    </div>
-                </div>
-                <div ref={project3} className="projsec">
-                  <div className="img">
-                    <img src="image/3dcandy.jpg"/>
-
-                  </div>
-                    <h2>Project Name</h2>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia maiores, quia dolorem obcaecati distinctio magnam cupiditate sit voluptas, dolor placeat, fugiat asperiores possimus qui at quasi eveniet nesciunt laborum atque.</p>
-                    <div>
-                        <a><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  viewBox="0 0 16 16">
-  <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/>
-</svg></a>
-                        <a><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  viewBox="0 0 16 16">
-  <path fillRule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
-  <path fillRule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
-</svg></a>
-                    </div>
-                </div>
-              
-
-              </div>
         </div>
     );
 }
-export default Project;
+export default Skills;
