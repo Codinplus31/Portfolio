@@ -12,7 +12,7 @@ setsize(true)
 
 
 }else{
-    
+setdisplay(true);
 setsize(false)
 
 
