@@ -47,7 +47,7 @@ return (
                 )}
                  </div>            
             </div>
-            {display === true?(
+            {display === false?(
             <div className="mobileheader" style={{display:'grid'}}>
                     <a href="#skills" onClick={()=>{
                         setdisplay(true)
