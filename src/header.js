@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 function Header(){
-    let [size, setsize] = useState(false)
+    let [size, setsize] = useState(true)
     let [display, setdisplay] = useState(false)
 // let media = media.
 function query(){
