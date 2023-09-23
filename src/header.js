@@ -48,7 +48,7 @@ return (
                  </div>            
             </div>
             {display === true?(
-            <div className="mobileheader" style={{display: 'none' }}>
+            <div className="mobileheader" style={{display: 'grid' }}>
                     <a href="#skills" onClick={()=>{
                         setdisplay(true)
                     }}><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 16 16">
