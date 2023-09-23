@@ -500,7 +500,6 @@ display: none;
   transform: translateX(-50%);
   justify-items: center;
   align-content: center;
-  border: 1px solid red;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 100px); 
   row-gap: 1.3rem;
