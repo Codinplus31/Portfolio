@@ -25,12 +25,12 @@ function Contact(){
     // Perform validation here, e.g., check if fields are not empty
     const newErrors = {};
       
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+    if (!formData.from_name.trim()) {
+      newErrors.from_name = 'Name is required';
    
     }
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+    if (!formData.to_name.trim()) {
+      newErrors.to_name = 'Email is required';
   
     }
     if (!formData.message.trim()) {
