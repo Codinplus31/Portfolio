@@ -59,6 +59,7 @@ function Contact(){
   
       
  //   };
+    console.log(errors);
     return (
         <>
         <form id="contact" ref={form} onSubmit={sendEmail} className="contact">
