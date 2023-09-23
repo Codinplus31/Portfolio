@@ -1,11 +1,7 @@
 import React,{useRef,useState} from "react";
 import emailjs from "@emailjs/browser";
 function Contact(){
-    // emailjs.send("service_k9ahhke","template_465aqdg",{
-    //     from_name: "uni",
-    //     to_name: "poll",
-    //     message: "fccc",
-    //     });
+    
     const [formData, setFormData] = useState({
     from_name: '',
     to_name: '',
@@ -37,7 +33,7 @@ function Contact(){
       newErrors.message = 'Message is required';
  
     }
-      console.log(newErrors);
+      
     if (Object.keys(newErrors).length === 0) {
       // Validation passed, send the email using Email.js
       // Import and configure emailjs-com with your Service ID and User ID
@@ -54,12 +50,8 @@ function Contact(){
   };
     const form = useRef();
 
-  //  const sendEmail = (e) => {
-    //  e.preventDefault();
-  
-      
- //   };
-    alert(errors);
+ 
+    
     return (
         <>
         <form id="contact" ref={form} onSubmit={sendEmail} className="contact">
