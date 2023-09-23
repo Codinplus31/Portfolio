@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 function Header(){
     let [size, setsize] = useState(false)
-    let [display, setdisplay] = useState(false)
+    let [display, setdisplay] = useState(true)
 // let media = media.
 function query(){
     let match = window.matchMedia('(max-width: 600px)');
@@ -47,7 +47,7 @@ return (
                 )}
                  </div>            
             </div>
-            {display === false?(
+            {display === true?(
             <div className="mobileheader" style={{display:'grid'}}>
                     <a href="#skills" onClick={()=>{
                         setdisplay(true)
