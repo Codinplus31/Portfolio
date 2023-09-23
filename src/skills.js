@@ -8,7 +8,7 @@ function Skills(){
     function ScrollTran(elem, classes){
 
       const observer = new IntersectionObserver((entry)=>{
-      console.log(entry)
+      
   entry.forEach(e=>{
     if(e.isIntersecting){
       e.target.classList.add(classes)
