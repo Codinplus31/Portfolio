@@ -24,6 +24,7 @@ function Contact(){
     e.preventDefault();
     // Perform validation here, e.g., check if fields are not empty
     const newErrors = {};
+      
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required';
     }
@@ -33,6 +34,7 @@ function Contact(){
     if (!formData.message.trim()) {
       newErrors.message = 'Message is required';
     }
+      console.log(newErrors);
     if (Object.keys(newErrors).length === 0) {
       // Validation passed, send the email using Email.js
       // Import and configure emailjs-com with your Service ID and User ID
