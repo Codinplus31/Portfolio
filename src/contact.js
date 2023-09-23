@@ -65,9 +65,9 @@ function Contact(){
         <form id="contact" ref={form} onSubmit={sendEmail} className="contact">
             <h1>Contact Me</h1>
             <img src="isme.jpg" />
-        <input name="from_name" onChange={handleInputChange} placeholder="Full Name"/>    
-        <input name="to_name" onChange={handleInputChange} placeholder="Email"/>
-        <textarea name="message" onChange={handleInputChange} placeholder="Messages: Hire For Job / Freelance"></textarea>
+        <input name="from_name" value={formData.from_name} onChange={handleInputChange} placeholder="Full Name"/>    
+        <input name="to_name" value={formData.to_name} onChange={handleInputChange} placeholder="Email"/>
+        <textarea name="message" value={formData.message} onChange={handleInputChange} placeholder="Messages: Hire For Job / Freelance"></textarea>
         <button type="submit">Hire</button>    
 
         </form>
