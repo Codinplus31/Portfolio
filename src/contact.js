@@ -38,7 +38,7 @@ function Contact(){
       // Validation passed, send the email using Email.js
       // Import and configure emailjs-com with your Service ID and User ID
       // Then use emailjs.send() to send the email
-        emailjs.sendForm('service_k9ahhke', 'template_465aqdg', form.current,'O6HhNdYvR8NCZTRik')
+        emailjs.sendForm(process.env.ID, process.env.TEMPLATE, form.current, process.env.KEY)
         .then((result) => {
             console.log(result.text);
         }, (error) => {
