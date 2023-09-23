@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Header from './header.jsx';
-import Skills from './skills.jsx';
+import Header from './header.js';
+import Skills from './skills.js';
 import Projects from './project';
 import About from './about';
 import Contact  from './contact';
