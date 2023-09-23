@@ -6,26 +6,62 @@ function Contact(){
     //     to_name: "poll",
     //     message: "fccc",
     //     });
-    const form = useRef();
+    const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
+    let [send,setsend] = useState(false);
 
-    const sendEmail = (e) => {
-      e.preventDefault();
-  
-      emailjs.sendForm('service_k9ahhke', 'template_465aqdg', form.current,'O6HhNdYvR8NCZTRik')
+  const [errors, setErrors] = useState({});
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+    // Perform validation here, e.g., check if fields are not empty
+    const newErrors = {};
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
+    }
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    }
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+    }
+    if (Object.keys(newErrors).length === 0) {
+      // Validation passed, send the email using Email.js
+      // Import and configure emailjs-com with your Service ID and User ID
+      // Then use emailjs.send() to send the email
+        emailjs.sendForm('service_k9ahhke', 'template_465aqdg', form.current,'O6HhNdYvR8NCZTRik')
         .then((result) => {
             console.log(result.text);
         }, (error) => {
             console.log(error.text);
         });
-    };
+    } else {
+      setErrors(newErrors);
+    }
+  };
+    const form = useRef();
+
+  //  const sendEmail = (e) => {
+    //  e.preventDefault();
+  
+      
+ //   };
     return (
         <>
         <form id="contact" ref={form} onSubmit={sendEmail} className="contact">
             <h1>Contact Me</h1>
             <img src="isme.jpg" />
-        <input name="from_name" placeholder="Full Name"/>    
-        <input name="to_name" placeholder="Email"/>
-        <textarea name="message" placeholder="Messages: Hire For Job / Freelance"></textarea>
+        <input name="from_name" onChange={handleInputChange} placeholder="Full Name"/>    
+        <input name="to_name" onChange={handleInputChange} placeholder="Email"/>
+        <textarea name="message" onChange={handleInputChange} placeholder="Messages: Hire For Job / Freelance"></textarea>
         <button type="submit">Hire</button>    
 
         </form>
