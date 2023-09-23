@@ -8,8 +8,8 @@ function Contact(){
     //     });
     const form = useRef();
 
-    // const sendEmail = (e) => {
-    //   e.preventDefault();
+    const sendEmail = (e) => {
+      e.preventDefault();
   
       emailjs.sendForm('service_k9ahhke', 'template_465aqdg', form.current)
         .then((result) => {
