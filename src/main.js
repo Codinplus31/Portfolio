@@ -1,17 +1,18 @@
 import React from 'react';
 
-import Header from './header.js';
-import Skills from './skills.js';
-import Projects from './project.js';
-import About from './about.js';
-import Contact  from './contact.js';
+import Header from './header.jsx';
+import Skills from './skills.jsx';
+import Projects from './project';
+import About from './about';
+import Contact  from './contact';
 function Main(){
+
 
 return (
   <div className="main">
             <div className="mainbody">
             <Header />
-              <div className="front">
+              <div id='home' className="front">
                 <div className='hero'>
 <h5><b>I'M PAUL UHUNOMA,</b></h5>
 <h5><b>A WEB DEVELOPER</b></h5>
