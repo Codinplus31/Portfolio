@@ -27,12 +27,15 @@ function Contact(){
       
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required';
+   alert(newErrors.name)
     }
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
+  alert(newErrors.email)
     }
     if (!formData.message.trim()) {
       newErrors.message = 'Message is required';
+ alert(newErrors.message)
     }
       console.log(newErrors);
     if (Object.keys(newErrors).length === 0) {
