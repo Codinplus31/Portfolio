@@ -23,10 +23,10 @@ function Contact(){
         <form id="contact" ref={form} onSubmit={sendEmail} className="contact">
             <h1>Contact Me</h1>
             <img src="isme.jpg" />
-        <input placeholder="Full Name"/>    
-        <input placeholder="Email"/>
-        <textarea placeholder="Messages: Hire For Job / Freelance"></textarea>
-        <button>Hire</button>    
+        <input name="from_name" placeholder="Full Name"/>    
+        <input name="to_name" placeholder="Email"/>
+        <textarea name="message" placeholder="Messages: Hire For Job / Freelance"></textarea>
+        <button type="submit">Hire</button>    
 
         </form>
         <div className="footer">
