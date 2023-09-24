@@ -395,8 +395,8 @@ margin-bottom: 6%;
   justify-items: center;
   align-items: center;
   column-gap: 1rem;
-/*   column-gap: 2px;
-/*   row-gap: 1%; */ */
+/*   column-gap: 2px; */
+  row-gap: 1%;
   margin-bottom: 8rem;
   margin-top: 4rem;
   /* align-items: center; */
