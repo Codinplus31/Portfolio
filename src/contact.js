@@ -58,8 +58,8 @@ console.log(process.env,process.env.CLIENT_ID)
             <h1>Contact Me</h1>
             <img src="isme.jpg" />
         <input name="from_name" style={{border: typeof errors.from_name === 'undefined'?"": "1px solid red"}} title={ typeof errors.from_name === 'undefined'?null:errors.from_name} value={formData.from_name} onChange={handleInputChange} placeholder="Full Name"/>    
-        <input name="to_name"  title={typeof errors.to_name === 'undefined'?null:errors.to_name} value={formData.to_name} onChange={handleInputChange} placeholder="Email"/>
-        <textarea name="message" title={typeof errors.message === 'undefined'?null:errors.message} value={formData.message} onChange={handleInputChange} placeholder="Messages: Hire For Job / Freelance"></textarea>
+        <input name="to_name" style={{border: typeof errors.to_name === 'undefined'?"": "1px solid red"}} title={typeof errors.to_name === 'undefined'?null:errors.to_name} value={formData.to_name} onChange={handleInputChange} placeholder="Email"/>
+        <textarea name="message" style={{border: typeof errors.message === 'undefined'?"": "1px solid red"}} title={typeof errors.message === 'undefined'?null:errors.message} value={formData.message} onChange={handleInputChange} placeholder="Messages: Hire For Job / Freelance"></textarea>
         <button type="submit">Hire</button>    
 
         </form>
