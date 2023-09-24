@@ -658,6 +658,19 @@ color: var(--red);
   .front > .hero > h5{
     font-size: 1.6rem;
   }
+    .about{
+    grid-template-columns: repeat(1, 1fr) !important;
+  grid-template-rows: repeat(2, fit-content) !important;
+  /* grid-auto-rows: 10px !important; */
+  row-gap: 4rem;
+  }
+  .about > img{
+    width: 80%;
+
+  }
+  .about > p{
+    font-size: 1.6rem;
+  }
 }
 @media screen and (max-width: 658px){
   .front > .hero > h5{
@@ -701,6 +714,7 @@ color: var(--red);
 
     } 
   }
+
 @media screen and (max-width: 509px){
   .front{
     flex-direction: column-reverse;
@@ -766,16 +780,7 @@ color: var(--red);
   .Skills > .cat:last-of-type{
     justify-self: center;
   }
-  .about{
-    grid-template-columns: repeat(1, 1fr) !important;
-  grid-template-rows: repeat(2, fit-content) !important;
-  /* grid-auto-rows: 10px !important; */
-  row-gap: 4rem;
-  }
-  .about > img{
-    width: 80%;
 
-  }
 }
 
 @media screen and (max-width: 763px){
