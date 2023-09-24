@@ -431,8 +431,8 @@ margin-bottom: 6%;
 .contact > .textarea::before{
   content:attr(error);
   display:block;
-  width:100%;
-  height:100%;
+  width:max-content;
+  height:max-content;
   color:red;
   position:absolute;
   bottom:10%;
@@ -443,8 +443,8 @@ margin-bottom: 6%;
 .contact > .input::before{
   content:attr(error);
   display:block;
-  width:100%;
-  height:100%;
+   width:max-content;
+  height:max-content;
   color:red;
   background:blue;
   position:absolute;
