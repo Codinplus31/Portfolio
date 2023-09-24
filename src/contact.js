@@ -58,10 +58,10 @@ console.log(errors)
         <form id="contact" ref={form} onSubmit={sendEmail} className="contact">
             <h1>Contact Me</h1>
             <img src="isme.jpg" />
-        <div className="input" error={ typeof errors.from_name === 'undefined'?null:errors.from_name}>
+        <div className="input first" error={ typeof errors.from_name === 'undefined'?null:errors.from_name}>
         <input name="from_name" style={{border: typeof errors.from_name === 'undefined'?"": "1px solid red"}}  value={formData.from_name} onChange={handleInputChange} placeholder="Full Name"/>    
         </div>
-        <div className="input" error={typeof errors.to_name === 'undefined'?null:errors.to_name}>
+        <div className="input last" error={typeof errors.to_name === 'undefined'?null:errors.to_name}>
         <input name="to_name" style={{border: typeof errors.to_name === 'undefined'?"": "1px solid red"}}  value={formData.to_name} onChange={handleInputChange} placeholder="Email"/>
         </div>
         <div className="textarea"  error={typeof errors.message === 'undefined'?null:errors.message}>
