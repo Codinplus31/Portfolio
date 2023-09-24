@@ -50,7 +50,7 @@ function Contact(){
   };
     const form = useRef();
 
-alert(process.env)
+console.log(process.env)
     
     return (
         <>
