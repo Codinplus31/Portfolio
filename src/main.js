@@ -40,7 +40,9 @@ return (
 </div>
 </div>
 <div className="button">
-    <button>Hire me </button>              
+    <button onClick={()=>{
+  location.href = "#contact";
+    }}>Hire me </button>              
 
 </div>
 </div>
