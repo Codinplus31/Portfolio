@@ -41,7 +41,7 @@ return (
 </div>
 <div className="button">
     <button onClick={()=>{
-  location.href = "#contact";
+  window.location = "#contact";
     }}>Hire me </button>              
 
 </div>
