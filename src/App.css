@@ -428,7 +428,7 @@ margin-bottom: 6%;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
   position:relative;
 }
-.contact > textarea::after{
+.contact > textarea::before{
   content:attr(title);
   display:block;
   width:100%;
@@ -440,7 +440,7 @@ margin-bottom: 6%;
   left:1%;
 }
 
-.contact > input::after{
+.contact > input::before{
   content:attr(title);
   display:block;
   width:100%;
