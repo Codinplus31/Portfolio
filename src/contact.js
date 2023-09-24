@@ -58,14 +58,14 @@ console.log(errors)
         <form id="contact" ref={form} onSubmit={sendEmail} className="contact">
             <h1>Contact Me</h1>
             <img src="isme.jpg" />
-        <div className="input">
-        <input name="from_name" style={{border: typeof errors.from_name === 'undefined'?"": "1px solid red"}} title={ typeof errors.from_name === 'undefined'?null:errors.from_name} value={formData.from_name} onChange={handleInputChange} placeholder="Full Name"/>    
+        <div className="input" error={ typeof errors.from_name === 'undefined'?null:errors.from_name}>
+        <input name="from_name" style={{border: typeof errors.from_name === 'undefined'?"": "1px solid red"}}  value={formData.from_name} onChange={handleInputChange} placeholder="Full Name"/>    
         </div>
-        <div className="input">
-        <input name="to_name" style={{border: typeof errors.to_name === 'undefined'?"": "1px solid red"}} title={typeof errors.to_name === 'undefined'?null:errors.to_name} value={formData.to_name} onChange={handleInputChange} placeholder="Email"/>
+        <div className="input" error={typeof errors.to_name === 'undefined'?null:errors.to_name}>
+        <input name="to_name" style={{border: typeof errors.to_name === 'undefined'?"": "1px solid red"}}  value={formData.to_name} onChange={handleInputChange} placeholder="Email"/>
         </div>
-        <div className="textarea">
-        <textarea name="message" style={{border: typeof errors.message === 'undefined'?"": "1px solid red"}} title={typeof errors.message === 'undefined'?null:errors.message} value={formData.message} onChange={handleInputChange} placeholder="Messages: Hire For Job / Freelance"></textarea>
+        <div className="textarea"  error={typeof errors.message === 'undefined'?null:errors.message}>
+        <textarea name="message" style={{border: typeof errors.message === 'undefined'?"": "1px solid red"}}  value={formData.message} onChange={handleInputChange} placeholder="Messages: Hire For Job / Freelance"></textarea>
         </div>
         <button type="submit">Hire</button>    
         </form>
