@@ -440,8 +440,7 @@ margin-bottom: 6%;
   height:max-content;
   color:red;
   position:absolute;
-  bottom:10%;
-  background:blue;
+  bottom:1%;
   left:1%;
 }
 
@@ -451,9 +450,8 @@ margin-bottom: 6%;
    width:max-content;
   height:max-content;
   color:red;
-  background:blue;
   position:absolute;
-  bottom:10%;
+  bottom:1%;
   left:1%;
 }
 .contact > .textarea:focus{
