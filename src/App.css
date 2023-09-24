@@ -680,6 +680,10 @@ color: var(--red);
   .front > .hero > p{
     font-size: 0.8rem !important;
   }
+    .about > div > p{
+      font-size: 0.8rem !important;
+    }
+
 }
 @media screen and (max-width: 583px){
   .front > .hero > h5{
