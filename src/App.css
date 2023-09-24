@@ -438,9 +438,9 @@ margin-bottom: 6%;
   display:block;
   width:max-content;
   height:max-content;
-  color:red;
+  color:var(--red);
   position:absolute;
-  bottom:1%;
+  bottom:-4%;
   left:1%;
 }
 
@@ -449,9 +449,9 @@ margin-bottom: 6%;
   display:block;
    width:max-content;
   height:max-content;
-  color:red;
+  color:var(--red);
   position:absolute;
-  bottom:1%;
+  bottom:-4%;
   left:1%;
 }
 .contact > .textarea:focus{
