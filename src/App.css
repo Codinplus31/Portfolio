@@ -684,13 +684,13 @@ color: var(--red);
     width: 100%;
     text-align: center;
   } */
-  .contact > input{
+  .contact > .input{
     min-width: 90%;  
     grid-column: 1/1;
   justify-self: center !important;
 
     }
-    .contact > textarea{
+    .contact > .textarea{
       grid-column: 1/1;
       min-width: 90%;  
 
