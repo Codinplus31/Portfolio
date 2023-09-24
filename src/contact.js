@@ -65,7 +65,7 @@ console.log(errors)
         <input name="from_name" style={{border: typeof errors.from_name === 'undefined'?"": "1px solid red"}}  value={formData.from_name} onChange={handleInputChange} placeholder="Full Name"/>    
         </div>
         <div className="input last" error={typeof errors.to_name === 'undefined'?null:errors.to_name}>
-        <input name="to_name" style={{border: typeof errors.to_name === 'undefined'?"": "1px solid red"}}  value={formData.to_name} onChange={handleInputChange} placeholder="Email"/>
+        <input name="to_name" style={{border: typeof errors.to_name === 'undefined'?"": "1px solid red"}}  value={formData.to_name} onChange={handleInputChange} placeholder="Email/WhatsApp No"/>
         </div>
         <div className="textarea"  error={typeof errors.message === 'undefined'?null:errors.message}>
         <textarea name="message" style={{border: typeof errors.message === 'undefined'?"": "1px solid red"}}  value={formData.message} onChange={handleInputChange} placeholder="Messages: Hire For Job / Freelance"></textarea>
