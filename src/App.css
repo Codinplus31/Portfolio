@@ -440,7 +440,7 @@ margin-bottom: 6%;
   left:1%;
 }
 
-.contact > input::before{
+.contact > .input::before{
   content:attr(title);
   display:block;
   width:100%;
@@ -468,7 +468,7 @@ margin-bottom: 6%;
   font-weight: 600;
   font-family: 'Archivo';
 }
-.contact > input{
+.contact > .input{
   width: calc(50%);
   height: 4rem;
   padding-left: 0.5rem;
@@ -481,18 +481,22 @@ margin-bottom: 6%;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 
 }
-.contact > input:focus{
+.contact > .input > input{
+width:100%;
+height:100%;
+}
+.contact > .input:focus{
   /* box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px; */
   /* box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.9) 0px 0px 0px 1px; */
   box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
   
 }
-.contact > input:first-of-type{
+.contact > .input:first-of-type{
   /* grid-column: 1/3; */
   justify-self: flex-end;
 
 }
-.contact > input:last-of-type{
+.contact > .input:last-of-type{
   /* grid-column: 1/3; */
   justify-self: flex-start;
 }
