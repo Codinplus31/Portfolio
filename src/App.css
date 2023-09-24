@@ -412,7 +412,7 @@ margin-bottom: 6%;
   height: 7rem;
   border-radius: 50%;
 }
-.contact > textarea{
+.contact > .textarea{
   grid-column: 1/3;
   width: 50%;
   height: 9rem;
@@ -428,7 +428,7 @@ margin-bottom: 6%;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
   position:relative;
 }
-.contact > textarea::before{
+.contact > .textarea::before{
   content:attr(title);
   display:block;
   width:100%;
@@ -451,10 +451,16 @@ margin-bottom: 6%;
   bottom:5%;
   left:1%;
 }
-.contact > textarea:focus{
+.contact > .textarea:focus{
   box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
   
 }
+
+.contact > textarea{
+width:100%;
+height:100%;
+}
+
 .contact > button{
   grid-column: 1/3;
   border-radius: 4px;
