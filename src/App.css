@@ -423,6 +423,16 @@ margin-bottom: 6%;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
   position:relative;
 }
+.contact > .input{
+  width: 50%;
+  height: 4rem;
+  box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.9) 0px 0px 0px 1px;
+  border-radius: 1%;
+  min-width: 247px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  position:relative;
+}
+
 .contact > .textarea::before{
   content:attr(error);
   display:block;
@@ -475,15 +485,7 @@ height:100%;
   font-weight: 600;
   font-family: 'Archivo';
 }
-.contact > .input{
-  width: 50%;
-  height: 4rem;
-  box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.9) 0px 0px 0px 1px;
-  border-radius: 1%;
-  min-width: 247px;
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-  position:relative;
-}
+
 .contact > .input > input{
 width:100%;
 height:100%;
