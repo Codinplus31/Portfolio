@@ -649,7 +649,6 @@ color: var(--red);
   }
   .about > div > p{
     margin-inline: 5%;
-    font-size: 1.6rem;
     text-align: center;
     margin-bottom: 1%;
   }
@@ -669,9 +668,7 @@ color: var(--red);
     width: 80%;
 
   }
-  .about > p{
-    font-size: 1.6rem;
-  }
+
 }
 @media screen and (max-width: 658px){
   .front > .hero > h5{
