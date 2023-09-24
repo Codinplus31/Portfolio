@@ -451,7 +451,7 @@ margin-bottom: 6%;
   height:max-content;
   color:var(--red);
   position:absolute;
-  bottom:-17%;
+  bottom:-21%;
   left:1%;
 }
 .contact > .textarea:focus{
