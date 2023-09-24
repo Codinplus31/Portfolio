@@ -64,7 +64,7 @@ console.log(errors)
         <div className="input">
         <input name="to_name" style={{border: typeof errors.to_name === 'undefined'?"": "1px solid red"}} title={typeof errors.to_name === 'undefined'?null:errors.to_name} value={formData.to_name} onChange={handleInputChange} placeholder="Email"/>
         </div>
-        <div className="input">
+        <div className="textarea">
         <textarea name="message" style={{border: typeof errors.message === 'undefined'?"": "1px solid red"}} title={typeof errors.message === 'undefined'?null:errors.message} value={formData.message} onChange={handleInputChange} placeholder="Messages: Hire For Job / Freelance"></textarea>
         </div>
         <button type="submit">Hire</button>    
