@@ -31,7 +31,7 @@ ProjectTran(project3.current, 'projtran')
               <div  className="proj">
                 <div ref={project1} className="projsec">
                   <div className="img">
-                    <img src="/F9b1YLsWsAAkmP1.jpeg"/>
+                    <img src="/watch pic.png"/>
 
                   </div>
                     <h2>WATCHOUT</h2>
