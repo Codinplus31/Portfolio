@@ -43,7 +43,7 @@ function Contact(){
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': 'https://emailjs-backend.onrender.com'
+      mode:'no-cors'
   },
   body: JSON.stringify(formData)
 };
