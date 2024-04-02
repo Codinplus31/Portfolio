@@ -333,7 +333,7 @@ color: var(--lired);
 }
 .about{
   width: 100%;
-  height: 356px;
+  height: 350px;
   /* border: 1px solid red; */
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -643,7 +643,7 @@ color: var(--red);
   grid-template-rows: repeat(2, fit-content) !important;
   /* grid-auto-rows: 10px !important; */
   row-gap: 4rem;
-    height: 240px;
+/*     height: 240px; */
   }
   .about > div{
     display: flex;
