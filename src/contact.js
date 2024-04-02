@@ -48,10 +48,10 @@ function Contact(){
   body: JSON.stringify(formData)
 };
 
-fetch('https://emailjs-backend.onrender.com', options).then(response => response.json()).then((result) => {
+fetch('https://emailjs-backend.onrender.com/', options).then(response => response.json()).then((result) => {
             alert("message sent");
             console.log(result.text);
-        }, (error) => {
+        }).catch(error) => {
             alert("you're offline");
 
             console.log(error.text);
