@@ -48,7 +48,7 @@ function Contact(){
   body: JSON.stringify(formData)
 };
 
-fetch('https://emailjs-backend.onrender.com/', options).then(response => response.json()).then((result) => {
+emailjs.sendForm(process.env.REACT_APP_CLIENT_ID, process.env.REACT_APP_CLIENT_TEMPLATE, form.current, process.env.REACT_APP_CLIENT_KEY).then((result) => {
             alert("message sent");
             console.log(result.text);
         }).catch(error) => {
