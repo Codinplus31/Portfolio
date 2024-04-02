@@ -39,8 +39,15 @@ function Contact(){
       // Import and configure emailjs-com with your Service ID and User ID
       // Then use emailjs.send() to send the email
         setErrors({});
-        emailjs.sendForm(process.env.REACT_APP_CLIENT_ID, process.env.REACT_APP_CLIENT_TEMPLATE, form.current, process.env.REACT_APP_CLIENT_KEY)
-        .then((result) => {
+       const options = {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(formData)
+};
+
+fetch('https://emailjs-backend.onrender.com', options).then(response => response.json()).then((result) => {
             alert("message sent");
             console.log(result.text);
         }, (error) => {
