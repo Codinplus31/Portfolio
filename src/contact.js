@@ -42,7 +42,8 @@ function Contact(){
        const options = {
   method: 'POST',
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': 'https://emailjs-backend.onrender.com'
   },
   body: JSON.stringify(formData)
 };
