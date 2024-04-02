@@ -42,8 +42,10 @@ function Contact(){
         
 
 emailjs.sendForm(process.env.REACT_APP_CLIENT_ID, process.env.REACT_APP_CLIENT_TEMPLATE, form.current, process.env.REACT_APP_CLIENT_KEY).then((result) => {
-            console.log(result.text);
+    alert('message sent')       
+    console.log(result.text);
         }, (error) => {
+    alert('unable to connect or you're offline')
             console.log(error.text);
         });
     } else {
