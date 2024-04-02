@@ -333,7 +333,7 @@ color: var(--lired);
 }
 .about{
   width: 100%;
-  height: fit-content;
+  height: 356px;
   /* border: 1px solid red; */
   display: grid;
   grid-template-columns: repeat(2, 1fr);
