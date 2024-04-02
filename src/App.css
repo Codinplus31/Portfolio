@@ -643,6 +643,7 @@ color: var(--red);
   grid-template-rows: repeat(2, fit-content) !important;
   /* grid-auto-rows: 10px !important; */
   row-gap: 4rem;
+    height: 240px;
   }
   .about > div{
     display: flex;
@@ -652,7 +653,7 @@ color: var(--red);
   }
   .about > img{
     
-    height: 45%;
+/*     height: 45%; */
   }
   .about > div > p{
     margin-inline: 5%;
