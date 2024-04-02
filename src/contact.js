@@ -38,22 +38,12 @@ function Contact(){
       // Validation passed, send the email using Email.js
       // Import and configure emailjs-com with your Service ID and User ID
       // Then use emailjs.send() to send the email
-        setErrors({});
-//        const options = {
-//   method: 'POST',
-//   headers: {
-//     'Content-Type': 'application/json',
-//       mode:'no-cors'
-//   },
-//   body: JSON.stringify(formData)
-// };
+        // emailjs.sendForm('service_k9ahhke', 'template_465aqdg', form.current,'O6HhNdYvR8NCZTRik')
+        
 
 emailjs.sendForm(process.env.REACT_APP_CLIENT_ID, process.env.REACT_APP_CLIENT_TEMPLATE, form.current, process.env.REACT_APP_CLIENT_KEY).then((result) => {
-            alert("message sent");
             console.log(result.text);
-        }).catch(error) => {
-            alert("you're offline");
-
+        }, (error) => {
             console.log(error.text);
         });
     } else {
