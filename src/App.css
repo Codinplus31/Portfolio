@@ -650,6 +650,10 @@ color: var(--red);
     align-items: center;
     flex-direction: column;
   }
+  .about > img{
+    
+    height: 45%;
+  }
   .about > div > p{
     margin-inline: 5%;
     text-align: center;
