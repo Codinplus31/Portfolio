@@ -3,17 +3,19 @@ function Project(){
   let [data,setdata] = useState ([{
 name: "WATCHOUTMOVIES",
     desc:"this is a movie streaming website with an api that allow you to download movie,stream movies and get notified if any movie get released.",
-                  
+    img:"/watch pic.png",              
     url:"https://watchoutmovies.vercel.app",
     codelink:"https://github.com/Codinplus31/watchoutmovies"
   },{
     name: "YTDS",
     desc: "YTDS is a youtube tool for downloading youtube video, converting video to mp3 and getting youtube video keywords.",           
+    img:"downloader.png",
     url:"ytds.vercel.app",
     codelink:"https://github.com/Codinplus31/ytds"
   },{
     name: "MAXIGRAM",
     desc:"This is a movie website design.",                   
+    img:"movies.png",
     url:"https://chlorinated-ribbon-carob.glitch.me/index/",
     codelink:"https://github.com/Codinplus31/moviestm"
   }])
@@ -49,7 +51,7 @@ ProjectTran(child[i], 'projtran')
     {data && data.map((e,i)=>(
                 <div  className="projsec" key={i}>
                   <div className="img">
-                    <img src="/watch pic.png"/>
+                    <img src={e.img}/>
 
                   </div>
                     <h2>{e.name}</h2>
