@@ -36,8 +36,9 @@ name: "WATCHOUTMOVIES",
 const Skills = elem;
 observer.observe(Skills);
 }
-    project1.current.children.forEach(e=>{
-ProjectTran(e, 'projtran')
+   let child =  project1.current.children;
+  for(let i =0; i < child.length; i++){
+ProjectTran(child[i], 'projtran')
    })
 },[])
                
