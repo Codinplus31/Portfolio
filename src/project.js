@@ -11,7 +11,7 @@ name: "WATCHOUTMOVIES",
     desc:"Shorter-links.vercel.app is a URL shortener that allows you to shorten long links for easy sharing on social media, emails, text messages, and other platforms. It's a free alternative to popular URL shorteners like Bitly and TinyURL.",
     img:"/shortlink.jpeg",
     url:"https://shorter-links.vercel.app",
-    codelink:"https://github.com/Codinplus31/short.ink"
+    codelink:"https://github.com/Codinplus31/short.link"
     
   },{
     name: "YTDS",
