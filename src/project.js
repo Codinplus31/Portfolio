@@ -39,7 +39,7 @@ observer.observe(Skills);
    let child =  project1.current.children;
   for(let i =0; i < child.length; i++){
 ProjectTran(child[i], 'projtran')
-   })
+   }
 },[])
                
     return (
