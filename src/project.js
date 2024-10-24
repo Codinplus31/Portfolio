@@ -1,12 +1,21 @@
 import React, {useEffect, useState, useRef} from "react";
 function Project(){
-  let [data,setdata] = useState ([{
+  let [data,setdata] = useState ([
+    {
+name: "TranscriptAI",
+    desc:"Transcriptai.xyz is an AI-powered transcription platform that effortlessly converts your audio and video content into accurate text. With advanced technology, it offers fast, reliable, and detailed transcriptions, saving you time and effort.",
+    img:"/transcriptai.png",              
+    url:"https://transcriptai.xyz",
+    codelink:"https://github.com/Codinplus31/transcriptai"
+  },
+    {
 name: "WATCHOUTMOVIES",
     desc:"this is a movie streaming website with an api that allow you to download movie,stream movies and get notified if any movie get released.",
     img:"/watch pic.png",              
     url:"https://watchoutmovies.vercel.app",
     codelink:"https://github.com/Codinplus31/watchoutmovies"
-  },{
+  },
+                                  {
     name:"SHORTER.LINKS",
     desc:"Shorter-links.vercel.app is a URL shortener that allows you to shorten long links for easy sharing on social media, emails, text messages, and other platforms. It's a free alternative to popular URL shorteners like Bitly and TinyURL.",
     img:"/shortlink.jpeg",
