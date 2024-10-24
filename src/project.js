@@ -29,18 +29,6 @@ name: "WATCHOUTMOVIES",
     url:"https://shorter-links.vercel.app",
     codelink:"https://github.com/Codinplus31/short.link"
     
-  },{
-    name: "YTDS",
-    desc: "YTDS is a youtube tool for downloading youtube video, converting video to mp3 and getting youtube video keywords.",           
-    img:"downloader.png",
-    url:"ytds.vercel.app",
-    codelink:"https://github.com/Codinplus31/ytds"
-  },{
-    name: "MAXIGRAM",
-    desc:"This is a movie website design.",                   
-    img:"movies.png",
-    url:"https://chlorinated-ribbon-carob.glitch.me/index/",
-    codelink:"https://github.com/Codinplus31/moviestm"
   }])
   let project1 = useRef();
   
