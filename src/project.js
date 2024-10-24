@@ -2,6 +2,13 @@ import React, {useEffect, useState, useRef} from "react";
 function Project(){
   let [data,setdata] = useState ([
     {
+name: "Tweetgenius",
+    desc:"TweetGenius: Your all-in-one Twitter automation and content creation tool. Schedule tweets, generate engaging ideas, and simplify your social media workflow. ",
+    img:"/tweetgenius.png",              
+    url:"https://tweetgenius.vercel.app",
+    codelink:"https://github.com/Codinplus31/techtweet"
+  },
+    {
 name: "TranscriptAI",
     desc:"Transcriptai.xyz is an AI-powered transcription platform that effortlessly converts your audio and video content into accurate text. With advanced technology, it offers fast, reliable, and detailed transcriptions, saving you time and effort.",
     img:"/transcriptai.png",              
