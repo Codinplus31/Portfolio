@@ -2,10 +2,10 @@ import React, {useEffect, useState, useRef} from "react";
 function Project(){
   let [data,setdata] = useState ([
     {
-name: "Tweetgenius",
-    desc:"TweetGenius: Your all-in-one Twitter automation and content creation tool. Schedule tweets, generate engaging ideas, and simplify your social media workflow. ",
+name: "Twitomate",
+    desc:"Twitomate: Your all-in-one Twitter automation and content creation tool. Schedule tweets, generate engaging ideas, and simplify your social media workflow. ",
     img:"/tweetgenius.png",              
-    url:"https://tweetgenius.vercel.app",
+    url:"https://twitomate.com",
     codelink:"https://github.com/Codinplus31/techtweet"
   },
     {
