@@ -13,7 +13,7 @@ name: "Twitomate",
 name: "TranscriptAI",
     desc:"Transcriptai.xyz is an AI-powered transcription platform that effortlessly converts your audio and video content into accurate text. With advanced technology, it offers fast, reliable, and detailed transcriptions, saving you time and effort.",
     img:"/transcriptai.png",              
-    url:"https://transcriptai.xyz",
+    url:"https://transcriptai.vercel.app",
       hide: true,
     codelink:"https://github.com/Codinplus31/transcriptai"
   },
