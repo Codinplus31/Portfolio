@@ -22,7 +22,7 @@ name: "TranscriptAI",
 name: "WATCHOUTMOVIES",
     desc:"this is a movie streaming website with an api that allow you to download movie,stream movies and get notified if any movie get released.",
     // img:"/watch pic.png",   
-    img:"/Screenshot_2025_07_23-2.png",   
+    img:"/watch pic.png",   
       hide: true,
     url:"https://watchoutmovies.vercel.app",
     codelink:"https://github.com/Codinplus31/watchoutmovies"
