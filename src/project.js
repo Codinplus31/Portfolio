@@ -10,6 +10,17 @@ name: "Twitomate",
       hide: true,
     codelink:"https://github.com/Codinplus31/techtweet"
   },
+
+       {
+name: "Autojobs",
+    desc:"auto-remotely is a simple web app that delivers new remote jobs from We Work Remotely directly to your inbox. Just enter your email and start receiving a curated list of jobs that match your preferences. No more endless searching—get the latest remote opportunities delivered right to you.",
+    img:"/tweetgenius.png",              
+    url:"https://autojobs-remotely.vercel.app",
+      hide: true,
+    codelink:"https://github.com/Codinplus31/autojobs-client"
+  },
+    {
+      
     {
 name: "TranscriptAI",
     desc:"Transcriptai.xyz is an AI-powered transcription platform that effortlessly converts your audio and video content into accurate text. With advanced technology, it offers fast, reliable, and detailed transcriptions, saving you time and effort.",
@@ -92,3 +103,4 @@ ProjectTran(child[i], 'projtran')
     );
 }
 export default Project;
+
