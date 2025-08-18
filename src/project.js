@@ -2,15 +2,15 @@ import React, {useEffect, useState, useRef} from "react";
 function Project(){
   
   let [data,setdata] = useState ([
-    {
-name: "Twitomate",
-    desc:"Twitomate: Your all-in-one Twitter automation and content creation tool. Schedule tweets, generate engaging ideas, and simplify your social media workflow. ",
-    img:"/tweetgenius.png",              
-    url:"https://twitomate.com",
+{
+name: "WATCHOUTMOVIES",
+    desc:"this is a movie streaming website with an api that allow you to download movie,stream movies and get notified if any movie get released.",
+    // img:"/watch pic.png",   
+    img:"/Screenshot_2025_07_23-2.png",   
       hide: true,
-    codelink:"https://github.com/Codinplus31/techtweet"
+    url:"https://watchoutmovies.vercel.app",
+    codelink:"https://github.com/Codinplus31/watchoutmovies"
   },
-
        {
 name: "Autojobs",
     desc:"auto-remotely is a simple web app that delivers new remote jobs from We Work Remotely directly to your inbox. Just enter your email and start receiving a curated list of jobs that match your preferences. No more endless searching—get the latest remote opportunities delivered right to you.",
@@ -18,6 +18,14 @@ name: "Autojobs",
     url:"https://autojobs-remotely.vercel.app",
       hide: true,
     codelink:"https://github.com/Codinplus31/autojobs-client"
+  },
+    {
+name: "Twitomate",
+    desc:"Twitomate: Your all-in-one Twitter automation and content creation tool. Schedule tweets, generate engaging ideas, and simplify your social media workflow. ",
+    img:"/tweetgenius.png",              
+    url:"https://twitomate.com",
+      hide: true,
+    codelink:"https://github.com/Codinplus31/techtweet"
   },
     
       
@@ -29,15 +37,7 @@ name: "TranscriptAI",
       hide: true,
     codelink:"https://github.com/Codinplus31/transcriptai"
   },
-    {
-name: "WATCHOUTMOVIES",
-    desc:"this is a movie streaming website with an api that allow you to download movie,stream movies and get notified if any movie get released.",
-    // img:"/watch pic.png",   
-    img:"/Screenshot_2025_07_23-2.png",   
-      hide: true,
-    url:"https://watchoutmovies.vercel.app",
-    codelink:"https://github.com/Codinplus31/watchoutmovies"
-  },
+    
                                   {
     name:"SHORTER.LINKS",
     desc:"Shorter-links.vercel.app is a URL shortener that allows you to shorten long links for easy sharing on social media, emails, text messages, and other platforms. It's a free alternative to popular URL shorteners like Bitly and TinyURL.",
@@ -103,6 +103,7 @@ ProjectTran(child[i], 'projtran')
     );
 }
 export default Project;
+
 
 
 
