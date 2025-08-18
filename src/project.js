@@ -19,7 +19,7 @@ name: "Autojobs",
       hide: true,
     codelink:"https://github.com/Codinplus31/autojobs-client"
   },
-    {
+    
       
     {
 name: "TranscriptAI",
@@ -103,5 +103,6 @@ ProjectTran(child[i], 'projtran')
     );
 }
 export default Project;
+
 
 
