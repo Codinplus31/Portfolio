@@ -14,7 +14,7 @@ name: "Twitomate",
        {
 name: "Autojobs",
     desc:"auto-remotely is a simple web app that delivers new remote jobs from We Work Remotely directly to your inbox. Just enter your email and start receiving a curated list of jobs that match your preferences. No more endless searching—get the latest remote opportunities delivered right to you.",
-    img:"/tweetgenius.png",              
+    img:"/Screenshot_2025_08_18-1.png",              
     url:"https://autojobs-remotely.vercel.app",
       hide: true,
     codelink:"https://github.com/Codinplus31/autojobs-client"
@@ -103,4 +103,5 @@ ProjectTran(child[i], 'projtran')
     );
 }
 export default Project;
+
 
