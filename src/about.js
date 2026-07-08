@@ -25,7 +25,7 @@ function About(){
   },[])
     return (
         <div id='about' className='about'>
-                <img ref={img} src='isme.jpg' />
+                <img ref={img} src='isme.jpg' alt="Profile portrait" />
             <div ref={content}>
             <h1>About Me</h1>
             <p>I am a skilled front-end and back-end developer specializing in creating user-friendly and visually appealing websites. With a strong command of HTML, CSS, and JavaScript and libraries like bootstrap, tailwind css, jQuery, Vuejs, Babylonjs, reactjs.</p>

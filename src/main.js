@@ -74,7 +74,7 @@ return (
 </div>
 <div className='clip'>
 <div className='curve'>
-<img src='./isme-removebg.png'/>
+<img src='./isme-removebg.png' alt="Paul Uhunoma"/>
 
 </div>
 </div>

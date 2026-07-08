@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emailjs/browser": "^3.11.0",
     "axios": "^1.4.0",
     "cra-template": "1.2.0",
+    "cross-fetch": "4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^5.3.4",
-    "react-scripts": "5.0.1",
-    "cross-fetch":"4.0.0",
-    "@emailjs/browser":"^3.11.0"
+    "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

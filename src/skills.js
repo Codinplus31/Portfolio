@@ -35,23 +35,23 @@ ScrollTran(backEnd.current, 'backend')
 </svg></h1>
                   <div className="cat" ref={frontEnd}>
                     <h3>Front-end</h3>
-                    <div title="javascript"><img src='javascript.svg' width='50%' height='50%'/></div>
-                    <div title="reactjs"><img src='react.svg' width='50%' height='50%'/></div>
-                    <div title="Vuejs"><img src='vue.svg' width='50%' height='50%'/></div>
-                    <div title="babylonjs"><img src='babylon.svg' width='70%' height='70%' /></div>
-                    <div title="bootstrap"><img src='bootstrap.svg' width='50%' height='50%'/></div>
-                    <div title="tailwind"><img src='tailwind.svg' width='50%' height='50%'/></div>
-                    <div title="css"><img src='css.svg' width='50%' height='50%'/></div>
-                    <div title="jQuery"><img src='jquery.svg' width='50%' height='50%'/></div>
+                    <div title="javascript"><img src='javascript.svg' alt="JavaScript" width='50%' height='50%'/></div>
+                    <div title="reactjs"><img src='react.svg' alt="React" width='50%' height='50%'/></div>
+                    <div title="Vuejs"><img src='vue.svg' alt="Vue.js" width='50%' height='50%'/></div>
+                    <div title="babylonjs"><img src='babylon.svg' alt="Babylon.js" width='70%' height='70%' /></div>
+                    <div title="bootstrap"><img src='bootstrap.svg' alt="Bootstrap" width='50%' height='50%'/></div>
+                    <div title="tailwind"><img src='tailwind.svg' alt="Tailwind CSS" width='50%' height='50%'/></div>
+                    <div title="css"><img src='css.svg' alt="CSS" width='50%' height='50%'/></div>
+                    <div title="jQuery"><img src='jquery.svg' alt="jQuery" width='50%' height='50%'/></div>
                   </div>
                   <div className="cat" ref={backEnd}>
                     <h3>Back-end</h3>
-                    <div title="nodejs"><img src='node.svg' width='50%' height='50%'/></div>
-                    <div title="expressjs" className="express-icon-wrapper"><img src='express.svg' width='50%' height='50%'/></div>
-                    <div title="socket.io"><img src='socket.svg' width='50%' height='50%'/></div>
-                    <div title="mysql"><img src='mysql.svg' width='60%' height='60%'/></div>
-                    <div title="postgresql"><img src='postgresql.svg' width='50%' height='50%'/></div>
-                    <div title="php"><img src='php.svg' width='50%' height='50%'/></div>
+                    <div title="nodejs"><img src='node.svg' alt="Node.js" width='50%' height='50%'/></div>
+                    <div title="expressjs" className="express-icon-wrapper"><img src='express.svg' alt="Express.js" width='50%' height='50%'/></div>
+                    <div title="socket.io"><img src='socket.svg' alt="Socket.io" width='50%' height='50%'/></div>
+                    <div title="mysql"><img src='mysql.svg' alt="MySQL" width='60%' height='60%'/></div>
+                    <div title="postgresql"><img src='postgresql.svg' alt="PostgreSQL" width='50%' height='50%'/></div>
+                    <div title="php"><img src='php.svg' alt="PHP" width='50%' height='50%'/></div>
                     <div title="mongodb">
                       <svg width="50%" height="50%" viewBox="0 0 256 549" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid">
                         <path d="M175.622 61.108C152.612 33.807 132.797 6.078 128.749.32a1.03 1.03 0 0 0-1.492 0c-4.048 5.759-23.863 33.487-46.874 60.788-197.507 251.896 31.108 421.89 31.108 421.89l1.917 1.28c1.172 26.098 5.653 67.23 5.653 67.23h18.266s4.48-41.132 5.653-67.23l1.917-1.28s228.615-169.994 31.724-421.89" fill="#00ED64"/>

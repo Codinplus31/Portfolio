@@ -84,7 +84,7 @@ return (
 
     <img onClick={()=>{
                         setdisplay(true)
-                    }} style={{position: 'absolute', top:'1.4%', right: '2.2%'}} src="./x.svg" />
+                    }} style={{position: 'absolute', top:'1.4%', right: '2.2%'}} src="./x.svg" alt="Close menu" />
             </div>):''
             }
             </>

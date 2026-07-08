@@ -66,7 +66,7 @@ function Contact(){
         <>
         <form id="contact" ref={form} onSubmit={sendEmail} className="contact">
             <h1>Contact Me</h1>
-            <img src="isme.jpg" />
+            <img src="isme.jpg" alt="Profile" />
         <div className="input first" error={ typeof errors.from_name === 'undefined'?null:errors.from_name}>
         <input name="from_name" style={{border: typeof errors.from_name === 'undefined'?"": "1px solid red"}}  value={formData.from_name} onChange={handleInputChange} placeholder="Full Name"/>    
         </div>

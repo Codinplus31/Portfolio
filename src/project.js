@@ -59,7 +59,7 @@ ProjectTran(child[i], 'projtran')
     {data && data.map((e,i)=>(
                 <div  className="projsec" key={i}>
                   <div className="img">
-                    <img src={e.img}/>
+                    <img src={e.img} alt={e.name}/>
 
                   </div>
                     <h2>{e.name}</h2>
