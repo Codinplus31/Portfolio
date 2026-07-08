@@ -4,15 +4,17 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-app.use(cors());
+
+// Use express.json() for parsing JSON bodies
 app.use(express.json());
+app.use(cors());
 
 // Configure Nodemailer transporter
 const transporter = nodemailer.createTransport({
   service: process.env.EMAIL_SERVICE || 'gmail',
   auth: {
-    user: process.env.EMAIL_USER, // Your email address
-    pass: process.env.EMAIL_PASS, // Your email app password
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
@@ -27,8 +29,8 @@ app.post('/api/contact', async (req, res) => {
     // Send email to you (portfolio owner)
     await transporter.sendMail({
       from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER, // Your email - receives the message
-      replyTo: email, // So you can reply directly to the sender
+      to: process.env.EMAIL_USER,
+      replyTo: email,
       subject: `Portfolio Contact: ${name}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -78,7 +80,13 @@ app.post('/api/contact', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Contact API server running on port ${PORT}`);
-});
+// For local development
+if (process.env.NODE_ENV !== 'production' && require.main === module) {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Contact API server running on port ${PORT}`);
+  });
+}
+
+// Export for Vercel
+module.exports = app;

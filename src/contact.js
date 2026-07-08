@@ -33,7 +33,7 @@ function Contact(){
     if (Object.keys(newErrors).length === 0) {
       setSending(true);
       try {
-        const response = await fetch(process.env.REACT_APP_CONTACT_API || '/api/contact', {
+        const response = await fetch('/api/contact', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
