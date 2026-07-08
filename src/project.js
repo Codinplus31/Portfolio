@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef} from "react";
 function Project(){
   
-  let [data,setdata] = useState ([
+  let [data] = useState ([
 {
 name: "WATCHOUTMOVIES",
     desc:"this is a movie streaming website with an api that allow you to download movie,stream movies and get notified if any movie get released.",
