@@ -5,7 +5,6 @@ function Project(){
 {
 name: "WATCHOUTMOVIES",
     desc:"this is a movie streaming website with an api that allow you to download movie,stream movies and get notified if any movie get released.",
-    // img:"/watch pic.png",   
     img:"/Screenshot_2025_07_23-2.png",   
       hide: true,
     url:"https://watchoutmovies.vercel.app",
@@ -19,25 +18,6 @@ name: "Autojobs",
       hide: true,
     codelink:"https://github.com/Codinplus31/autojobs-client"
   },
-    {
-name: "Twitomate",
-    desc:"Twitomate: Your all-in-one Twitter automation and content creation tool. Schedule tweets, generate engaging ideas, and simplify your social media workflow. ",
-    img:"/tweetgenius.png",              
-    url:"https://twitomate.com",
-      hide: true,
-    codelink:"https://github.com/Codinplus31/techtweet"
-  },
-    
-      
-    {
-name: "TranscriptAI",
-    desc:"Transcriptai.xyz is an AI-powered transcription platform that effortlessly converts your audio and video content into accurate text. With advanced technology, it offers fast, reliable, and detailed transcriptions, saving you time and effort.",
-    img:"/transcriptai.png",              
-    url:"https://transcriptai.vercel.app",
-      hide: true,
-    codelink:"https://github.com/Codinplus31/transcriptai"
-  },
-    
                                   {
     name:"SHORTER.LINKS",
     desc:"Shorter-links.vercel.app is a URL shortener that allows you to shorten long links for easy sharing on social media, emails, text messages, and other platforms. It's a free alternative to popular URL shorteners like Bitly and TinyURL.",

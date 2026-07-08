@@ -1,5 +1,5 @@
 import React,{useRef,useState} from "react";
-import emailjs from "@emailjs/browser";
+
 function Contact(){
     
     const [formData, setFormData] = useState({
@@ -7,7 +7,7 @@ function Contact(){
     to_name: '',
     message: '',
   });
-    let [send,setsend] = useState(false);
+    let [sending, setSending] = useState(false);
 
   const [errors, setErrors] = useState({});
 
@@ -16,45 +16,51 @@ function Contact(){
     setFormData({ ...formData, [name]: value });
   };
 
-  const sendEmail = (e) => {
+  const sendEmail = async (e) => {
     e.preventDefault();
-    // Perform validation here, e.g., check if fields are not empty
     const newErrors = {};
       
     if (!formData.from_name.trim()) {
       newErrors.from_name = 'Name is required';
-   
     }
     if (!formData.to_name.trim()) {
       newErrors.to_name = 'Email is required';
-  
     }
     if (!formData.message.trim()) {
       newErrors.message = 'Message is required';
- 
     }
       
     if (Object.keys(newErrors).length === 0) {
-      // Validation passed, send the email using Email.js
-      // Import and configure emailjs-com with your Service ID and User ID
-      // Then use emailjs.send() to send the email
-        // emailjs.sendForm('service_k9ahhke', 'template_465aqdg', form.current,'O6HhNdYvR8NCZTRik')
-        
-
-emailjs.sendForm(process.env.REACT_APP_CLIENT_ID, process.env.REACT_APP_CLIENT_TEMPLATE, form.current, process.env.REACT_APP_CLIENT_KEY).then((result) => {
-    alert('message sent');       
-    console.log(result.text);
-        }, (error) => {
-    alert("unable to connect or you're offline");
-            console.log(error.text);
+      setSending(true);
+      try {
+        const response = await fetch(process.env.REACT_APP_CONTACT_API || '/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: formData.from_name,
+            email: formData.to_name,
+            message: formData.message,
+          }),
         });
+
+        if (response.ok) {
+          alert('Message sent successfully!');
+          setFormData({ from_name: '', to_name: '', message: '' });
+        } else {
+          alert('Failed to send message. Please try again.');
+        }
+      } catch (error) {
+        alert("Unable to connect or you're offline. Please try again later.");
+        console.error(error);
+      }
+      setSending(false);
     } else {
       setErrors(newErrors);
     }
   };
     const form = useRef();
-
-console.log(errors)
     
     return (
         <>
@@ -70,7 +76,7 @@ console.log(errors)
         <div className="textarea"  error={typeof errors.message === 'undefined'?null:errors.message}>
         <textarea name="message" style={{border: typeof errors.message === 'undefined'?"": "1px solid red"}}  value={formData.message} onChange={handleInputChange} placeholder="Messages: Hire For Job / Freelance"></textarea>
         </div>
-        <button type="submit">Hire</button>    
+        <button type="submit" disabled={sending}>{sending ? 'Sending...' : 'Hire'}</button>    
         </form>
         <div className="footer">
         <h3> <svg style={{marginTop: "0.1rem"}} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  viewBox="0 0 16 16">
