@@ -34,6 +34,26 @@ function getBody(req) {
 }
 
 function validateContact(body) {
+  const isPlainObject = body !== null
+    && typeof body === 'object'
+    && !Array.isArray(body)
+    && (Object.getPrototypeOf(body) === Object.prototype || Object.getPrototypeOf(body) === null);
+
+  if (!isPlainObject) {
+    return {
+      values: { name: '', email: '', message: '', website: '' },
+      errors: { body: 'Request body must be a JSON object.' },
+    };
+  }
+
+  const nonStringField = Object.keys(body).find((key) => typeof body[key] !== 'string');
+  if (nonStringField) {
+    return {
+      values: { name: '', email: '', message: '', website: '' },
+      errors: { [nonStringField]: 'This field must be a string.' },
+    };
+  }
+
   const name = typeof body.name === 'string' ? body.name.trim() : '';
   const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
   const message = typeof body.message === 'string' ? body.message.trim() : '';
