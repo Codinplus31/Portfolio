@@ -7,17 +7,22 @@
     "axios": "^1.4.0",
     "cra-template": "1.2.0",
     "cross-fetch": "4.0.0",
+    "dotenv": "^17.4.2",
+    "nodemailer": "^7.0.13",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^5.3.4",
     "react-scripts": "5.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently --kill-others-on-fail --names API,WEB \"npm run start:api\" \"npm run start:web\"",
+    "start:web": "react-scripts start",
+    "start:api": "node api/dev-server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "proxy": "http://127.0.0.1:3001",
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -35,5 +40,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.5"
   }
 }

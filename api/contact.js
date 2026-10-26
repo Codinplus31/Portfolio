@@ -1,92 +1,200 @@
-const express = require('express');
 const nodemailer = require('nodemailer');
-const cors = require('cors');
-require('dotenv').config();
 
-const app = express();
+const MAX_NAME_LENGTH = 100;
+const MAX_EMAIL_LENGTH = 254;
+const MAX_MESSAGE_LENGTH = 5000;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// Use express.json() for parsing JSON bodies
-app.use(express.json());
-app.use(cors());
+function sendJson(res, status, payload) {
+  res.statusCode = status;
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Cache-Control', 'no-store');
+  return res.end(JSON.stringify(payload));
+}
 
-// Configure Nodemailer transporter
-const transporter = nodemailer.createTransport({
-  service: process.env.EMAIL_SERVICE || 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
 
-app.post('/api/contact', async (req, res) => {
-  const { name, email, message } = req.body;
+function getBody(req) {
+  if (!req.body) return {};
+  if (typeof req.body === 'string') {
+    try {
+      return JSON.parse(req.body);
+    } catch (_) {
+      return {};
+    }
+  }
+  return req.body;
+}
 
-  if (!name || !email || !message) {
-    return res.status(400).json({ error: 'All fields are required' });
+function validateContact(body) {
+  const name = typeof body.name === 'string' ? body.name.trim() : '';
+  const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
+  const message = typeof body.message === 'string' ? body.message.trim() : '';
+  const website = typeof body.website === 'string' ? body.website.trim() : '';
+  const errors = {};
+
+  if (!name) errors.name = 'Name is required.';
+  else if (name.length > MAX_NAME_LENGTH) errors.name = `Name must be ${MAX_NAME_LENGTH} characters or fewer.`;
+
+  if (!email) errors.email = 'Email is required.';
+  else if (email.length > MAX_EMAIL_LENGTH || !EMAIL_PATTERN.test(email)) errors.email = 'Enter a valid email address.';
+
+  if (!message) errors.message = 'Message is required.';
+  else if (message.length > MAX_MESSAGE_LENGTH) errors.message = `Message must be ${MAX_MESSAGE_LENGTH} characters or fewer.`;
+
+  return { values: { name, email, message, website }, errors };
+}
+
+function createTransporter() {
+  const user = process.env.EMAIL_USER;
+  const pass = process.env.EMAIL_PASS;
+
+  if (!user || !pass) {
+    throw new Error('Email service is not configured');
   }
 
-  try {
-    // Send email to you (portfolio owner)
-    await transporter.sendMail({
-      from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER,
-      replyTo: email,
-      subject: `Portfolio Contact: ${name}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h2 style="color: #06b6d4;">New Portfolio Contact Message</h2>
-          <hr style="border: 1px solid #e2e8f0;" />
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Message:</strong></p>
-          <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; margin-top: 10px;">
-            <p>${message.replace(/\n/g, '<br>')}</p>
-          </div>
-          <hr style="border: 1px solid #e2e8f0; margin-top: 20px;" />
-          <p style="color: #64748b; font-size: 12px;">Sent from your portfolio contact form</p>
-        </div>
-      `,
+  if (process.env.SMTP_HOST) {
+    return nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT) || 587,
+      secure: process.env.SMTP_SECURE === 'true',
+      auth: { user, pass },
     });
-
-    // Send confirmation email to the user
-    await transporter.sendMail({
-      from: `"Paul Uhunoma" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: 'Thank you for reaching out!',
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h2 style="color: #06b6d4;">Thank you, ${name}!</h2>
-          <p>I've received your message and will get back to you as soon as possible.</p>
-          <hr style="border: 1px solid #e2e8f0;" />
-          <p><strong>Your message:</strong></p>
-          <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; margin-top: 10px;">
-            <p>${message.replace(/\n/g, '<br>')}</p>
-          </div>
-          <hr style="border: 1px solid #e2e8f0; margin-top: 20px;" />
-          <p style="color: #64748b; font-size: 14px;">— Paul Uhunoma | Full Stack Developer & Security Researcher</p>
-          <p style="color: #64748b; font-size: 12px;">
-            <a href="https://codinplus.vercel.app" style="color: #06b6d4;">codinplus.vercel.app</a> |
-            <a href="https://github.com/Codinplus31" style="color: #06b6d4;">GitHub</a> |
-            <a href="https://bugcrowd.com/h/codinplus" style="color: #06b6d4;">Bugcrowd</a>
-          </p>
-        </div>
-      `,
-    });
-
-    res.status(200).json({ success: true, message: 'Emails sent successfully' });
-  } catch (error) {
-    console.error('Email error:', error);
-    res.status(500).json({ error: 'Failed to send email' });
   }
-});
 
-// For local development
-if (process.env.NODE_ENV !== 'production' && require.main === module) {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`Contact API server running on port ${PORT}`);
+  return nodemailer.createTransport({
+    service: process.env.EMAIL_SERVICE || 'gmail',
+    auth: { user, pass },
   });
 }
 
-// Export for Vercel
-module.exports = app;
+function ownerEmail({ name, email, message }) {
+  const safeName = escapeHtml(name);
+  const safeEmail = escapeHtml(email);
+  const safeMessage = escapeHtml(message).replace(/\r?\n/g, '<br>');
+
+  return `
+    <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;color:#0f172a">
+      <h2 style="color:#0891b2">New portfolio contact message</h2>
+      <hr style="border:0;border-top:1px solid #e2e8f0">
+      <p><strong>Name:</strong> ${safeName}</p>
+      <p><strong>Email:</strong> <a href="mailto:${safeEmail}">${safeEmail}</a></p>
+      <p><strong>Message:</strong></p>
+      <div style="background:#f1f5f9;padding:15px;border-radius:8px;line-height:1.6">${safeMessage}</div>
+      <p style="color:#64748b;font-size:12px;margin-top:20px">Sent from your portfolio contact form.</p>
+    </div>`;
+}
+
+function confirmationEmail({ name, message }) {
+  const safeName = escapeHtml(name);
+  const safeMessage = escapeHtml(message).replace(/\r?\n/g, '<br>');
+
+  return `
+    <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;color:#0f172a">
+      <h2 style="color:#0891b2">Thank you, ${safeName}!</h2>
+      <p>I've received your message and will get back to you as soon as possible.</p>
+      <hr style="border:0;border-top:1px solid #e2e8f0">
+      <p><strong>Your message:</strong></p>
+      <div style="background:#f1f5f9;padding:15px;border-radius:8px;line-height:1.6">${safeMessage}</div>
+      <p style="color:#64748b;font-size:14px;margin-top:20px">— Paul Uhunoma | Full Stack Developer &amp; Security Researcher</p>
+    </div>`;
+}
+
+async function contactHandler(req, res) {
+  if (req.method === 'OPTIONS') {
+    res.statusCode = 204;
+    return res.end();
+  }
+
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST');
+    return sendJson(res, 405, { success: false, error: 'Method not allowed.' });
+  }
+
+  const { values, errors } = validateContact(getBody(req));
+  if (Object.keys(errors).length > 0) {
+    return sendJson(res, 400, { success: false, error: 'Please correct the highlighted fields.', errors });
+  }
+
+  // Hidden honeypot: acknowledge bots without sending email.
+  if (values.website) {
+    return sendJson(res, 200, { success: true, message: 'Message sent successfully.' });
+  }
+
+  try {
+    const transporter = createTransporter();
+    const sender = process.env.EMAIL_USER;
+    const recipient = process.env.EMAIL_TO || sender;
+
+    // The owner notification is the primary operation. Once it succeeds, the
+    // contact request is successful even if the courtesy confirmation fails.
+    await transporter.sendMail({
+      from: `"Portfolio Contact" <${sender}>`,
+      to: recipient,
+      replyTo: values.email,
+      subject: `Portfolio contact from ${values.name.replace(/[\r\n]/g, ' ')}`,
+      text: `Name: ${values.name}\nEmail: ${values.email}\n\n${values.message}`,
+      html: ownerEmail(values),
+    });
+
+    // Send a copy of every contact message to the additional notification address.
+    const notificationRecipient = process.env.CONTACT_NOTIFICATION_EMAIL || 'codinplus30@gmail.com';
+    let notificationSent = true;
+    if (notificationRecipient !== recipient) {
+      try {
+        await transporter.sendMail({
+          from: `"Portfolio Contact" <${sender}>`,
+          to: notificationRecipient,
+          replyTo: values.email,
+          subject: `New portfolio message from ${values.name.replace(/[\r\n]/g, ' ')}`,
+          text: `Someone sent a message through your portfolio contact form.\n\nName: ${values.name}\nEmail: ${values.email}\n\nMessage:\n${values.message}`,
+          html: ownerEmail(values),
+        });
+      } catch (notificationError) {
+        notificationSent = false;
+        console.error('Additional contact notification failed:', notificationError.message);
+      }
+    }
+
+    let confirmationSent = true;
+    try {
+      await transporter.sendMail({
+        from: `"Paul Uhunoma" <${sender}>`,
+        to: values.email,
+        subject: 'Thank you for reaching out!',
+        text: `Thank you, ${values.name}!\n\nI've received your message and will get back to you as soon as possible.\n\nYour message:\n${values.message}`,
+        html: confirmationEmail(values),
+      });
+    } catch (confirmationError) {
+      confirmationSent = false;
+      console.error('Contact confirmation email failed:', confirmationError.message);
+    }
+
+    return sendJson(res, 200, {
+      success: true,
+      notificationSent,
+      confirmationSent,
+      message: 'Your message has been sent successfully.',
+    });
+  } catch (error) {
+    console.error('Contact email failed:', error.message);
+    const notConfigured = error.message === 'Email service is not configured';
+    return sendJson(res, 500, {
+      success: false,
+      error: notConfigured
+        ? 'The contact service is temporarily unavailable.'
+        : 'Your message could not be sent. Please try again later.',
+    });
+  }
+}
+
+module.exports = contactHandler;
+module.exports.validateContact = validateContact;
+module.exports.escapeHtml = escapeHtml;
