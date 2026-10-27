@@ -204,7 +204,8 @@ export const securityReports = [
     screenshots: headwayScreenshots,
   },
 
-  /* ---------------------- VIEWSTATS / MRBEAST ----------------------- */
+  /* ---------------------- VIEWSTATS / MRBEAST -----------------------
+  Disabled at user's request.
   {
     id: 'viewstats-mrbeast',
     title: 'OAuth Token Leakage Account Takeover',
@@ -267,6 +268,7 @@ https://viewstats.com/?access_token=<victim_access_token>`,
       },
     ],
   },
+  */
 
   /* ---------------------------- VFS GLOBAL --------------------------- */
   {
